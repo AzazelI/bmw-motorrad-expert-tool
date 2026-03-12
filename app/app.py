@@ -7,7 +7,7 @@ app = Flask(__name__)
 # LOAD DATABASE
 # -----------------------------
 
-with open("motorcycle_specs_database.json", "r", encoding="utf-8") as f:
+with open("../motorcycle_specs_database.json", "r", encoding="utf-8") as f:
     database = json.load(f)
 
 
@@ -60,5 +60,6 @@ if __name__ == "__main__":
     print("---------------------------")
     print("Server running at:")
     print("http://127.0.0.1:5000\n")
+
 
     app.run(debug=True)
