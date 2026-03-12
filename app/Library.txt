@@ -1,0 +1,7 @@
+pip install pymupdf
+
+ngrok http 5000 ( Bash in CMD ) 
+
+https://d3cc-178-134-84-234.ngrok-free.app ( Link ) 
+
+http://127.0.0.1:4040/inspect/http ( Request tracker ) 
