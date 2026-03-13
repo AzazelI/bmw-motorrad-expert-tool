@@ -27,22 +27,26 @@ def home():
 @app.route("/search", methods=["POST"])
 def search():
 
-    query = request.json.get("query", "").upper()
+    query = request.json.get("query", "").strip().upper()
+
+    if not query:
+        return jsonify({"error": "Empty query"})
 
     for bike in database:
 
-        file_name = bike.get("file", "").upper()
         model = bike.get("model", "").upper()
 
-        if query in file_name or query in model:
+        # search ONLY by normalized model name
+        if query in model:
 
             return jsonify({
-                "file": bike.get("file"),
+                "model": bike.get("model"),
                 "engine_cc": bike.get("engine_cc"),
                 "power_kw": bike.get("power_kw"),
                 "horsepower": bike.get("horsepower"),
                 "kerb_weight": bike.get("kerb_weight_kg"),
                 "gross_weight": bike.get("gross_weight_kg"),
+                "payload": bike.get("payload_kg"),
                 "engine_type": bike.get("engine_type"),
                 "fuel": bike.get("fuel")
             })
