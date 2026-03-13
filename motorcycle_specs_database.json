@@ -1,6 +1,7 @@
 [
     {
-        "file": "C400GT_K09.pdf",
+        "model": "C400GT_K09",
+        "source_file": "C400GT_K09.pdf",
         "engine_cc": "350",
         "power_kw": "25",
         "horsepower": 34,
@@ -11,18 +12,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "C400GT_K09_00GT.pdf",
-        "engine_cc": "350",
-        "power_kw": "25",
-        "horsepower": 34,
-        "kerb_weight_kg": "216",
-        "gross_weight_kg": "422",
-        "payload_kg": "85",
-        "engine_type": "single-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "CE02_CE02.pdf",
+        "model": "CE02_CE02",
+        "source_file": "CE02_CE02.pdf",
         "engine_cc": null,
         "power_kw": "11",
         "horsepower": 15,
@@ -33,18 +24,8 @@
         "fuel": "Electric"
     },
     {
-        "file": "CE02_CE02_0C73.pdf",
-        "engine_cc": null,
-        "power_kw": "11",
-        "horsepower": 15,
-        "kerb_weight_kg": null,
-        "gross_weight_kg": "312",
-        "payload_kg": "132",
-        "engine_type": null,
-        "fuel": "Electric"
-    },
-    {
-        "file": "CE04_CE04.pdf",
+        "model": "CE04_CE04",
+        "source_file": "CE04_CE04.pdf",
         "engine_cc": null,
         "power_kw": "15",
         "horsepower": 20,
@@ -55,18 +36,8 @@
         "fuel": "Electric"
     },
     {
-        "file": "CE04_CE04_0C53.pdf",
-        "engine_cc": null,
-        "power_kw": "15",
-        "horsepower": 20,
-        "kerb_weight_kg": "231",
-        "gross_weight_kg": "410",
-        "payload_kg": "231",
-        "engine_type": null,
-        "fuel": "Electric"
-    },
-    {
-        "file": "F450GS_K90.pdf",
+        "model": "F450GS_K90",
+        "source_file": "F450GS_K90.pdf",
         "engine_cc": "420",
         "power_kw": "35",
         "horsepower": 47,
@@ -77,29 +48,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "F450GS_K90_0R31.pdf",
-        "engine_cc": "420",
-        "power_kw": "35",
-        "horsepower": 47,
-        "kerb_weight_kg": "178",
-        "gross_weight_kg": "355",
-        "payload_kg": "178",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "F450GS_K90_0R33.pdf",
-        "engine_cc": "420",
-        "power_kw": "35",
-        "horsepower": 47,
-        "kerb_weight_kg": "178",
-        "gross_weight_kg": "355",
-        "payload_kg": "178",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "F750GS_K80.pdf",
+        "model": "F750GS_K80",
+        "source_file": "F750GS_K80.pdf",
         "engine_cc": "853",
         "power_kw": "57",
         "horsepower": 76,
@@ -110,7 +60,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "F800GS_K80.pdf",
+        "model": "F800GS_K80",
+        "source_file": "F800GS_K80.pdf",
         "engine_cc": "895",
         "power_kw": "64",
         "horsepower": 86,
@@ -121,18 +72,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "F800GS_K80_00GS.pdf",
-        "engine_cc": "895",
-        "power_kw": "64",
-        "horsepower": 86,
-        "kerb_weight_kg": "227",
-        "gross_weight_kg": "440",
-        "payload_kg": "227",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "F900GSADVENTURE_K81.pdf",
+        "model": "F900GSA_K81",
+        "source_file": "F900GSADVENTURE_K81.pdf",
         "engine_cc": "895",
         "power_kw": "77",
         "horsepower": 103,
@@ -143,7 +84,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "F900GS_K82.pdf",
+        "model": "F900GS_K82",
+        "source_file": "F900GS_K82.pdf",
         "engine_cc": "895",
         "power_kw": "77",
         "horsepower": 103,
@@ -154,29 +96,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "F900GS_K82_.pdf",
-        "engine_cc": "895",
-        "power_kw": "77",
-        "horsepower": 103,
-        "kerb_weight_kg": "246",
-        "gross_weight_kg": "455",
-        "payload_kg": "246",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "F900GS_K82_00GS.pdf",
-        "engine_cc": "895",
-        "power_kw": "77",
-        "horsepower": 103,
-        "kerb_weight_kg": "219",
-        "gross_weight_kg": "445",
-        "payload_kg": "219",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "F900R_K83.pdf",
+        "model": "F900R_K83",
+        "source_file": "F900R_K83.pdf",
         "engine_cc": "895",
         "power_kw": "77",
         "horsepower": 103,
@@ -187,18 +108,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "F900R_K83_0K13.pdf",
-        "engine_cc": "895",
-        "power_kw": "77",
-        "horsepower": 103,
-        "kerb_weight_kg": "211",
-        "gross_weight_kg": "430",
-        "payload_kg": "211",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "G310GS_K02.pdf",
+        "model": "G310GS_K02",
+        "source_file": "G310GS_K02.pdf",
         "engine_cc": "313",
         "power_kw": "25",
         "horsepower": 34,
@@ -209,7 +120,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "G310GS_K02_0G12.pdf",
+        "model": "G310R_K03",
+        "source_file": "G310R_K03.pdf",
         "engine_cc": "313",
         "power_kw": "25",
         "horsepower": 34,
@@ -220,29 +132,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "G310R_K03.pdf",
-        "engine_cc": "313",
-        "power_kw": "25",
-        "horsepower": 34,
-        "kerb_weight_kg": "345",
-        "gross_weight_kg": null,
-        "payload_kg": "345",
-        "engine_type": null,
-        "fuel": "Petrol"
-    },
-    {
-        "file": "G310R_K03_0G11.pdf",
-        "engine_cc": "313",
-        "power_kw": "25",
-        "horsepower": 34,
-        "kerb_weight_kg": "345",
-        "gross_weight_kg": null,
-        "payload_kg": "345",
-        "engine_type": null,
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R18_K34.pdf",
+        "model": "R18_K34",
+        "source_file": "R18_K34.pdf",
         "engine_cc": "1802",
         "power_kw": "67",
         "horsepower": 90,
@@ -253,84 +144,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R18_K34_0L44.pdf",
-        "engine_cc": "1802",
-        "power_kw": "67",
-        "horsepower": 90,
-        "kerb_weight_kg": null,
-        "gross_weight_kg": "630",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R18_K34_0N71.pdf",
-        "engine_cc": "1802",
-        "power_kw": "67",
-        "horsepower": 90,
-        "kerb_weight_kg": "345",
-        "gross_weight_kg": "560",
-        "payload_kg": "85",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R18_K34_0N73.pdf",
-        "engine_cc": "1802",
-        "power_kw": "67",
-        "horsepower": 90,
-        "kerb_weight_kg": "345",
-        "gross_weight_kg": "560",
-        "payload_kg": "85",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R18_K34_0N81.pdf",
-        "engine_cc": "1802",
-        "power_kw": "67",
-        "horsepower": 90,
-        "kerb_weight_kg": null,
-        "gross_weight_kg": "560",
-        "payload_kg": "100",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R18_K34_0N83.pdf",
-        "engine_cc": "1802",
-        "power_kw": "67",
-        "horsepower": 90,
-        "kerb_weight_kg": null,
-        "gross_weight_kg": "560",
-        "payload_kg": "100",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R18_K34_0N91.pdf",
-        "engine_cc": "1802",
-        "power_kw": "67",
-        "horsepower": 90,
-        "kerb_weight_kg": null,
-        "gross_weight_kg": "560",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R18_K34_0N93.pdf",
-        "engine_cc": "1802",
-        "power_kw": "67",
-        "horsepower": 90,
-        "kerb_weight_kg": null,
-        "gross_weight_kg": "560",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "K1600GTL_K48.pdf",
+        "model": "K1600GTL_K48",
+        "source_file": "K1600GTL_K48.pdf",
         "engine_cc": "1649",
         "power_kw": "118",
         "horsepower": 158,
@@ -341,7 +156,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "K1600GT_K48.pdf",
+        "model": "K1600GT_K48",
+        "source_file": "K1600GT_K48.pdf",
         "engine_cc": "1649",
         "power_kw": "118",
         "horsepower": 158,
@@ -352,40 +168,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "K1600GT_K48_.pdf",
-        "engine_cc": "1649",
-        "power_kw": "118",
-        "horsepower": 158,
-        "kerb_weight_kg": "350",
-        "gross_weight_kg": "560",
-        "payload_kg": "10",
-        "engine_type": null,
-        "fuel": "Petrol"
-    },
-    {
-        "file": "K1600GT_K48_00GT.pdf",
-        "engine_cc": "1649",
-        "power_kw": "118",
-        "horsepower": 158,
-        "kerb_weight_kg": "343",
-        "gross_weight_kg": "540",
-        "payload_kg": "10",
-        "engine_type": null,
-        "fuel": "Petrol"
-    },
-    {
-        "file": "K1600GT_K48_0F33.pdf",
-        "engine_cc": "1649",
-        "power_kw": "118",
-        "horsepower": 158,
-        "kerb_weight_kg": null,
-        "gross_weight_kg": "560",
-        "payload_kg": "10",
-        "engine_type": null,
-        "fuel": "Petrol"
-    },
-    {
-        "file": "M1000RR_K66.pdf",
+        "model": "M1000RR_K66",
+        "source_file": "M1000RR_K66.pdf",
         "engine_cc": "999",
         "power_kw": "160",
         "horsepower": 215,
@@ -396,7 +180,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "M1000RR_K66_000R.pdf",
+        "model": "M1000R_K63",
+        "source_file": "M1000R_K63.pdf",
         "engine_cc": "999",
         "power_kw": "154",
         "horsepower": 207,
@@ -407,29 +192,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "M1000R_K63.pdf",
-        "engine_cc": "999",
-        "power_kw": "154",
-        "horsepower": 207,
-        "kerb_weight_kg": "199",
-        "gross_weight_kg": "407",
-        "payload_kg": "85",
-        "engine_type": "4-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "M1000R_K63_.pdf",
-        "engine_cc": "999",
-        "power_kw": "160",
-        "horsepower": 215,
-        "kerb_weight_kg": "194",
-        "gross_weight_kg": "407",
-        "payload_kg": "85",
-        "engine_type": "4-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "M1000XR_K69.pdf",
+        "model": "M1000XR_K69",
+        "source_file": "M1000XR_K69.pdf",
         "engine_cc": "999",
         "power_kw": "148",
         "horsepower": 198,
@@ -440,18 +204,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "M1000XR_K69_000X.pdf",
-        "engine_cc": "999",
-        "power_kw": "148",
-        "horsepower": 198,
-        "kerb_weight_kg": "223",
-        "gross_weight_kg": "450",
-        "payload_kg": "85",
-        "engine_type": null,
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R 12 - 0N51 EUR.pdf",
+        "model": "R12_0N51EUR",
+        "source_file": "R 12 - 0N51 EUR.pdf",
         "engine_cc": "1170",
         "power_kw": "70",
         "horsepower": 94,
@@ -462,7 +216,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R 12 - 0N53 USA.pdf",
+        "model": "R12_0N53USA",
+        "source_file": "R 12 - 0N53 USA.pdf",
         "engine_cc": "1170",
         "power_kw": "70",
         "horsepower": 94,
@@ -473,7 +228,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R 12 GS - 0N21 EUR.pdf",
+        "model": "R12GS_0N21EUR",
+        "source_file": "R 12 GS - 0N21 EUR.pdf",
         "engine_cc": "1170",
         "power_kw": "80",
         "horsepower": 107,
@@ -484,7 +240,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R 12 GS - 0N23 USA.pdf",
+        "model": "R12GS_0N23USA",
+        "source_file": "R 12 GS - 0N23 USA.pdf",
         "engine_cc": "1170",
         "power_kw": "80",
         "horsepower": 107,
@@ -495,7 +252,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R 12 nineT - 0N03 USA.pdf",
+        "model": "R12nineT_0N03USA",
+        "source_file": "R 12 nineT - 0N03 USA.pdf",
         "engine_cc": "1170",
         "power_kw": "80",
         "horsepower": 107,
@@ -506,7 +264,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R 12 nineT - 0N11 EUR.pdf",
+        "model": "R12nineT_0N11EUR",
+        "source_file": "R 12 nineT - 0N11 EUR.pdf",
         "engine_cc": "1170",
         "power_kw": "80",
         "horsepower": 107,
@@ -517,7 +276,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R 1300 R - 0M51 EUR.pdf",
+        "model": "R1300R",
+        "source_file": "R 1300 R - 0M51 EUR.pdf",
         "engine_cc": "1300",
         "power_kw": "107",
         "horsepower": 143,
@@ -528,62 +288,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R 1300 R - 0M53 USA.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "239",
-        "gross_weight_kg": "460",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R 1300 RS - 0M61 EUR.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "245",
-        "gross_weight_kg": "460",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R 1300 RS - 0M63 USA.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "245",
-        "gross_weight_kg": "460",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R 1300 RT - 0M41 EUR.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "281",
-        "gross_weight_kg": "510",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R 1300 RT - 0M43 USA.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "281",
-        "gross_weight_kg": "510",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R1300GSADVENTURE_K51.pdf",
+        "model": "R1300GSA_KA2",
+        "source_file": "R1300GSADVENTURE_KA2.pdf",
         "engine_cc": "1300",
         "power_kw": "107",
         "horsepower": 143,
@@ -594,7 +300,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R1300GS_K50.pdf",
+        "model": "R1300GS_KA1",
+        "source_file": "R1300GS_KA1.pdf",
         "engine_cc": "1300",
         "power_kw": "107",
         "horsepower": 143,
@@ -605,29 +312,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R1300GS_K50_.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "269",
-        "gross_weight_kg": "485",
-        "payload_kg": "269",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R1300GS_K50_00GS.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "240",
-        "gross_weight_kg": "465",
-        "payload_kg": "85",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R 1200 GS - 0A81 EUR.pdf",
+        "model": "R1200GS_0A81EUR",
+        "source_file": "R 1200 GS - 0A81 EUR.pdf",
         "engine_cc": null,
         "power_kw": null,
         "horsepower": null,
@@ -638,7 +324,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R 1200 GS Adventure - 0A02 EUR.pdf",
+        "model": "R1200GSAdventure_0A02EUR",
+        "source_file": "R 1200 GS Adventure - 0A02 EUR.pdf",
         "engine_cc": null,
         "power_kw": null,
         "horsepower": null,
@@ -649,7 +336,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R 1200 GS Adventure - 0A22 EUR.pdf",
+        "model": "R1200GSAdventure_0A22EUR",
+        "source_file": "R 1200 GS Adventure - 0A22 EUR.pdf",
         "engine_cc": null,
         "power_kw": null,
         "horsepower": null,
@@ -660,7 +348,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R 1200 RS - 0A05 EUR.pdf",
+        "model": "R1200RS_0A05EUR",
+        "source_file": "R 1200 RS - 0A05 EUR.pdf",
         "engine_cc": "1170",
         "power_kw": "92",
         "horsepower": 123,
@@ -671,7 +360,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R1250GS_K51.pdf",
+        "model": "R1250GS_K51",
+        "source_file": "R1250GS_K51.pdf",
         "engine_cc": "1254",
         "power_kw": "100",
         "horsepower": 134,
@@ -682,7 +372,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R1250RT_K52.pdf",
+        "model": "R1250RT_K52",
+        "source_file": "R1250RT_K52.pdf",
         "engine_cc": "1254",
         "power_kw": "100",
         "horsepower": 134,
@@ -693,7 +384,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R1250R_K53.pdf",
+        "model": "R1250R_K53",
+        "source_file": "R1250R_K53.pdf",
         "engine_cc": "1254",
         "power_kw": "100",
         "horsepower": 134,
@@ -704,84 +396,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "R1250R_K53_.pdf",
-        "engine_cc": "1254",
-        "power_kw": "100",
-        "horsepower": 134,
-        "kerb_weight_kg": "243",
-        "gross_weight_kg": "460",
-        "payload_kg": "10",
-        "engine_type": null,
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R1250R_K53_0J63.pdf",
-        "engine_cc": "1254",
-        "power_kw": "100",
-        "horsepower": 134,
-        "kerb_weight_kg": "279",
-        "gross_weight_kg": "505",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R1250R_K53_0M73.pdf",
-        "engine_cc": "1254",
-        "power_kw": "100",
-        "horsepower": 134,
-        "kerb_weight_kg": "239",
-        "gross_weight_kg": "460",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R1250R_K53_0M81.pdf",
-        "engine_cc": "1254",
-        "power_kw": "100",
-        "horsepower": 134,
-        "kerb_weight_kg": "243",
-        "gross_weight_kg": "460",
-        "payload_kg": "10",
-        "engine_type": null,
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R1250R_K53_0M83.pdf",
-        "engine_cc": "1254",
-        "power_kw": "100",
-        "horsepower": 134,
-        "kerb_weight_kg": "243",
-        "gross_weight_kg": "460",
-        "payload_kg": "10",
-        "engine_type": null,
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R1300GSA_KA2.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "269",
-        "gross_weight_kg": "485",
-        "payload_kg": "269",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "R1300GS_KA1.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "240",
-        "gross_weight_kg": "465",
-        "payload_kg": "85",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "RNINET_K21.pdf",
+        "model": "RNINET_K21",
+        "source_file": "RNINET_K21.pdf",
         "engine_cc": "1170",
         "power_kw": "80",
         "horsepower": 107,
@@ -792,62 +408,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "RNINET_K21_0L53.pdf",
-        "engine_cc": "1170",
-        "power_kw": "80",
-        "horsepower": 107,
-        "kerb_weight_kg": "221",
-        "gross_weight_kg": "430",
-        "payload_kg": "85",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "RNINET_K21_0L61.pdf",
-        "engine_cc": "1170",
-        "power_kw": "80",
-        "horsepower": 107,
-        "kerb_weight_kg": "219",
-        "gross_weight_kg": "430",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "RNINET_K21_0L63.pdf",
-        "engine_cc": "1170",
-        "power_kw": "80",
-        "horsepower": 107,
-        "kerb_weight_kg": "219",
-        "gross_weight_kg": "430",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "RNINET_K21_0L91.pdf",
-        "engine_cc": "1170",
-        "power_kw": "80",
-        "horsepower": 107,
-        "kerb_weight_kg": "223",
-        "gross_weight_kg": "430",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "RNINET_K21_0L93.pdf",
-        "engine_cc": "1170",
-        "power_kw": "80",
-        "horsepower": 107,
-        "kerb_weight_kg": "223",
-        "gross_weight_kg": "430",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "S1000RR_K67.pdf",
+        "model": "S1000RR_K67",
+        "source_file": "S1000RR_K67.pdf",
         "engine_cc": "999",
         "power_kw": "154",
         "horsepower": 207,
@@ -858,7 +420,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "S1000RR_K67_000R.pdf",
+        "model": "S1000R_K63",
+        "source_file": "S1000R_K63.pdf",
         "engine_cc": "999",
         "power_kw": "125",
         "horsepower": 168,
@@ -869,40 +432,8 @@
         "fuel": "Petrol"
     },
     {
-        "file": "S1000R_K63.pdf",
-        "engine_cc": "999",
-        "power_kw": "125",
-        "horsepower": 168,
-        "kerb_weight_kg": "199",
-        "gross_weight_kg": "407",
-        "payload_kg": "85",
-        "engine_type": "4-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "S1000R_K63_.pdf",
-        "engine_cc": "999",
-        "power_kw": "154",
-        "horsepower": 207,
-        "kerb_weight_kg": "198",
-        "gross_weight_kg": "407",
-        "payload_kg": "85",
-        "engine_type": "4-cylinder",
-        "fuel": "Petrol"
-    },
-    {
-        "file": "S1000XR_K69.pdf",
-        "engine_cc": "999",
-        "power_kw": "125",
-        "horsepower": 168,
-        "kerb_weight_kg": "227",
-        "gross_weight_kg": "450",
-        "payload_kg": "10",
-        "engine_type": null,
-        "fuel": "Petrol"
-    },
-    {
-        "file": "S1000XR_K69_000X.pdf",
+        "model": "S1000XR_K69",
+        "source_file": "S1000XR_K69.pdf",
         "engine_cc": "999",
         "power_kw": "125",
         "horsepower": 168,

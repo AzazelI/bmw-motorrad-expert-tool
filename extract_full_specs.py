@@ -5,7 +5,7 @@ import json
 
 manual_path = r"D:\BMW_MOTORRAD_AI\BMW_MOTORRAD_MANUALS"
 
-print("BMW MOTORRAD SPEC EXTRACTOR v5")
+print("BMW MOTORRAD SPEC EXTRACTOR v7")
 print("--------------------------------")
 
 def clean_text(t):
@@ -13,13 +13,55 @@ def clean_text(t):
     t = re.sub(r"\s+", " ", t)
     return t.lower()
 
+
+def normalize_filename(filename):
+
+    name = filename.replace(".pdf", "")
+
+    # normalize dash format
+    name = name.replace(" - ", "_")
+
+    # remove spaces
+    name = name.replace(" ", "")
+
+    # special fixes for R1300 family
+    if name.startswith("R1300R"):
+        return "R1300R"
+
+    if name.startswith("R1300RS"):
+        return "R1300RS"
+
+    if name.startswith("R1300RT"):
+        return "R1300RT"
+
+    # split normal format
+    parts = name.split("_")
+
+    model = parts[0]
+    variant = parts[1] if len(parts) > 1 else ""
+
+    # normalize adventure naming
+    if "ADVENTURE" in model:
+        model = model.replace("ADVENTURE", "A")
+
+    clean_model = f"{model}_{variant}" if variant else model
+
+    return clean_model
+
+
 specs = []
+processed_models = set()
 
 for root, dirs, files in os.walk(manual_path):
 
     for file in files:
 
         if not file.lower().endswith(".pdf"):
+            continue
+
+        clean_model = normalize_filename(file)
+
+        if clean_model in processed_models:
             continue
 
         path = os.path.join(root, file)
@@ -38,8 +80,7 @@ for root, dirs, files in os.walk(manual_path):
 
             text_lower = clean_text(text)
 
-            # ---------------- ENGINE CAPACITY ----------------
-
+            # ENGINE CAPACITY
             engine = re.search(r'(\d{3,4})\s?(cc|cm3|cm³)', text_lower)
 
             if not engine:
@@ -48,21 +89,18 @@ for root, dirs, files in os.walk(manual_path):
             engine_cc = engine.group(1) if engine else None
 
 
-            # ---------------- POWER ----------------
-
+            # POWER
             power_kw_match = re.search(r'(\d{2,3})\s?kW', text)
             power_kw = power_kw_match.group(1) if power_kw_match else None
 
 
-            # ---------------- HORSEPOWER ----------------
-
+            # HORSEPOWER
             horsepower_match = re.search(r'(\d{2,3})\s?hp', text_lower)
 
             horsepower = int(horsepower_match.group(1)) if horsepower_match else None
 
 
-            # ---------------- KERB WEIGHT ----------------
-
+            # KERB WEIGHT
             kerb_patterns = [
 
                 r'kerb weight.*?(\d{2,3})\s?kg',
@@ -81,8 +119,7 @@ for root, dirs, files in os.walk(manual_path):
                     break
 
 
-            # ---------------- GROSS WEIGHT ----------------
-
+            # GROSS WEIGHT
             gross_patterns = [
 
                 r'permitted total weight.*?(\d{2,3})\s?kg',
@@ -101,15 +138,13 @@ for root, dirs, files in os.walk(manual_path):
                     break
 
 
-            # ---------------- PAYLOAD (NEW) ----------------
-
+            # PAYLOAD
             payload_match = re.search(r'payload.*?(\d{2,3})\s?kg', text_lower)
 
             payload = payload_match.group(1) if payload_match else None
 
 
-            # ---------------- ENGINE TYPE ----------------
-
+            # ENGINE TYPE
             engine_type = None
 
             if "four-cylinder" in text_lower or "inline four" in text_lower:
@@ -122,22 +157,19 @@ for root, dirs, files in os.walk(manual_path):
                 engine_type = "single-cylinder"
 
 
-            # ---------------- FUEL ----------------
-
+            # FUEL
             fuel = "Petrol"
 
             if "electric motor" in text_lower or "electric drive" in text_lower:
                 fuel = "Electric"
 
 
-            # ---------------- CALCULATE HP ----------------
-
+            # CALCULATE HP
             if horsepower is None and power_kw:
                 horsepower = round(int(power_kw) * 1.341)
 
 
-            # ---------------- SANITY CHECK ----------------
-
+            # SANITY CHECK
             try:
 
                 if kerb_weight:
@@ -156,11 +188,11 @@ for root, dirs, files in os.walk(manual_path):
                 pass
 
 
-            # ---------------- SAVE DATA ----------------
-
+            # SAVE DATA
             data = {
 
-                "file": file,
+                "model": clean_model,
+                "source_file": file,
                 "engine_cc": engine_cc,
                 "power_kw": power_kw,
                 "horsepower": horsepower,
@@ -173,8 +205,9 @@ for root, dirs, files in os.walk(manual_path):
             }
 
             specs.append(data)
+            processed_models.add(clean_model)
 
-            print("Processed:", file)
+            print("Processed:", clean_model)
 
         except Exception as e:
             print("Error processing:", file)
