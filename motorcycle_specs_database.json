@@ -759,6 +759,28 @@
         "fuel": "Petrol"
     },
     {
+        "file": "R1300GSA_KA2.pdf",
+        "engine_cc": "1300",
+        "power_kw": "107",
+        "horsepower": 143,
+        "kerb_weight_kg": "269",
+        "gross_weight_kg": "485",
+        "payload_kg": "269",
+        "engine_type": "2-cylinder",
+        "fuel": "Petrol"
+    },
+    {
+        "file": "R1300GS_KA1.pdf",
+        "engine_cc": "1300",
+        "power_kw": "107",
+        "horsepower": 143,
+        "kerb_weight_kg": "240",
+        "gross_weight_kg": "465",
+        "payload_kg": "85",
+        "engine_type": "2-cylinder",
+        "fuel": "Petrol"
+    },
+    {
         "file": "RNINET_K21.pdf",
         "engine_cc": "1170",
         "power_kw": "80",
