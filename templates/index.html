@@ -1,28 +1,63 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-
 <title>BMW Motorrad Expert Tool</title>
-
 <link rel="stylesheet" href="/static/style.css">
-
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>BMW Motorrad Expert Tool</h1>
+<div class="title">
+BMW Motorrad Expert Tool
+</div>
 
-<input type="text" id="searchBox" placeholder="Enter chassis code or model">
+<input id="search" placeholder="Enter model or VIN">
 
-<button onclick="searchBike()">Search</button>
+<button onclick="search()">Search</button>
 
-<div id="result"></div>
+<div id="result" class="result"></div>
 
 </div>
 
-<script src="/static/script.js"></script>
+<script>
+
+async function search(){
+
+let query=document.getElementById("search").value
+
+let res=await fetch("/search",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({query:query})
+})
+
+let data=await res.json()
+
+if(data.error){
+document.getElementById("result").innerHTML="<p>Model not found</p>"
+return
+}
+
+document.getElementById("result").innerHTML=`
+
+<h3>${data.model}</h3>
+
+<div class="spec"><span>Engine capacity</span><span>${data.engine_cc} cc</span></div>
+<div class="spec"><span>Power</span><span>${data.power_kw} kW</span></div>
+<div class="spec"><span>Horsepower</span><span>${data.horsepower} hp</span></div>
+<div class="spec"><span>Kerb weight</span><span>${data.kerb_weight} kg</span></div>
+<div class="spec"><span>Gross weight</span><span>${data.gross_weight} kg</span></div>
+<div class="spec"><span>Engine type</span><span>${data.engine_type}</span></div>
+<div class="spec"><span>Fuel</span><span>${data.fuel}</span></div>
+
+`
+
+}
+
+</script>
 
 </body>
 </html>
