@@ -1,42 +1,33 @@
+from flask import Flask, render_template, request, jsonify
 import json
 
-print("\nBMW MOTORRAD EXPERT TOOL")
-print("------------------------")
-
-search = input("Enter chassis code OR model (example: K67 or S1000RR): ").strip().upper()
+app = Flask(__name__)
 
 with open("motorcycle_specs_database.json","r") as f:
-    data = json.load(f)
+    database=json.load(f)
 
-results = []
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-for item in data:
+@app.route("/search",methods=["POST"])
+def search():
 
-    model = item.get("model","").upper()
+    query=request.json.get("query","").strip().upper()
 
-    if search in model:
-        results.append(item)
+    results=[]
 
-if not results:
+    for bike in database:
 
-    print("\nModel not found in database.")
+        model=bike.get("model","").upper()
 
-else:
+        if query in model:
+            results.append(bike)
 
-    for found in results:
+    if not results:
+        return jsonify({"error":"Model not found"})
 
-        print("\n==============================")
-        print("MODEL:", found.get("model"))
+    return jsonify(results)
 
-        print("\n--- TECHNICAL DATA ---")
-
-        print("Engine capacity:", found.get("engine_cc"),"cc")
-        print("Power:", found.get("power_kw"),"kW")
-        print("Horsepower:", found.get("horsepower"),"hp")
-        print("Kerb weight:", found.get("kerb_weight_kg"),"kg")
-        print("Gross weight:", found.get("gross_weight_kg"),"kg")
-        print("Payload:", found.get("payload_kg"),"kg")
-        print("Engine type:", found.get("engine_type"))
-        print("Fuel:", found.get("fuel"))
-
-input("\nPress Enter to exit...")
+if __name__=="__main__":
+    app.run(debug=True)
