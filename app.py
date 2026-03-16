@@ -32,14 +32,20 @@ def search():
     if not query:
         return jsonify({"error": "Empty query"})
 
+    results = []
+
     for bike in database:
 
         model = bike.get("model", "").upper()
 
-        # search ONLY by normalized model name
-        if query in model:
+        parts = model.split("_")
 
-            return jsonify({
+        model_name = parts[0] if len(parts) > 0 else ""
+        chassis = parts[1] if len(parts) > 1 else ""
+
+        if query == model or query == model_name or query == chassis:
+
+            results.append({
                 "model": bike.get("model"),
                 "engine_cc": bike.get("engine_cc"),
                 "power_kw": bike.get("power_kw"),
@@ -51,7 +57,10 @@ def search():
                 "fuel": bike.get("fuel")
             })
 
-    return jsonify({"error": "Model not found"})
+    if not results:
+        return jsonify({"error": "Model not found"})
+
+    return jsonify(results)
 
 
 # -----------------------------

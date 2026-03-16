@@ -14,7 +14,7 @@
 BMW Motorrad Expert Tool
 </div>
 
-<input id="search" placeholder="Enter model or VIN">
+<input id="search" placeholder="Enter model or chassis">
 
 <button onclick="search()">Search</button>
 
@@ -41,19 +41,30 @@ document.getElementById("result").innerHTML="<p>Model not found</p>"
 return
 }
 
-document.getElementById("result").innerHTML=`
+let html=""
 
-<h3>${data.model}</h3>
+data.forEach(bike => {
 
-<div class="spec"><span>Engine capacity</span><span>${data.engine_cc} cc</span></div>
-<div class="spec"><span>Power</span><span>${data.power_kw} kW</span></div>
-<div class="spec"><span>Horsepower</span><span>${data.horsepower} hp</span></div>
-<div class="spec"><span>Kerb weight</span><span>${data.kerb_weight} kg</span></div>
-<div class="spec"><span>Gross weight</span><span>${data.gross_weight} kg</span></div>
-<div class="spec"><span>Engine type</span><span>${data.engine_type}</span></div>
-<div class="spec"><span>Fuel</span><span>${data.fuel}</span></div>
+html += `
+
+<h3>${bike.model}</h3>
+
+<div class="spec"><span>Engine capacity</span><span>${bike.engine_cc} cc</span></div>
+<div class="spec"><span>Power</span><span>${bike.power_kw} kW</span></div>
+<div class="spec"><span>Horsepower</span><span>${bike.horsepower} hp</span></div>
+<div class="spec"><span>Kerb weight</span><span>${bike.kerb_weight_kg} kg</span></div>
+<div class="spec"><span>Gross weight</span><span>${bike.gross_weight_kg} kg</span></div>
+<div class="spec"><span>Payload</span><span>${bike.payload_kg} kg</span></div>
+<div class="spec"><span>Engine type</span><span>${bike.engine_type}</span></div>
+<div class="spec"><span>Fuel</span><span>${bike.fuel}</span></div>
+
+<hr>
 
 `
+
+})
+
+document.getElementById("result").innerHTML = html
 
 }
 
