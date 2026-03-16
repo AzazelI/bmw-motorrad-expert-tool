@@ -5,8 +5,9 @@ import json
 
 manual_path = r"D:\BMW_MOTORRAD_AI\BMW_MOTORRAD_MANUALS"
 
-print("BMW MOTORRAD SPEC EXTRACTOR v7")
+print("BMW MOTORRAD SPEC EXTRACTOR v8")
 print("--------------------------------")
+
 
 def clean_text(t):
     t = t.replace("\n", " ")
@@ -17,40 +18,27 @@ def clean_text(t):
 def normalize_filename(filename):
 
     name = filename.replace(".pdf", "")
-
-    # normalize dash format
     name = name.replace(" - ", "_")
-
-    # remove spaces
     name = name.replace(" ", "")
 
-    # special fixes for R1300 family
-    if name.startswith("R1300R"):
-        return "R1300R"
+    # detect chassis codes (K63, K67 etc.)
+    chassis_match = re.search(r'K\d{2}', name.upper())
+    chassis = chassis_match.group(0) if chassis_match else None
 
-    if name.startswith("R1300RS"):
-        return "R1300RS"
+    # detect model (S1000RR, R1250GS etc.)
+    model_match = re.match(r'[A-Z]+\d+[A-Z]*', name.upper())
 
-    if name.startswith("R1300RT"):
-        return "R1300RT"
+    model = model_match.group(0) if model_match else name.upper()
 
-    # split normal format
-    parts = name.split("_")
+    if chassis:
+        return f"{model}_{chassis}"
 
-    model = parts[0]
-    variant = parts[1] if len(parts) > 1 else ""
-
-    # normalize adventure naming
-    if "ADVENTURE" in model:
-        model = model.replace("ADVENTURE", "A")
-
-    clean_model = f"{model}_{variant}" if variant else model
-
-    return clean_model
+    return model
 
 
 specs = []
 processed_models = set()
+
 
 for root, dirs, files in os.walk(manual_path):
 
@@ -89,8 +77,9 @@ for root, dirs, files in os.walk(manual_path):
             engine_cc = engine.group(1) if engine else None
 
 
-            # POWER
-            power_kw_match = re.search(r'(\d{2,3})\s?kW', text)
+            # POWER kW
+            power_kw_match = re.search(r'(\d{2,3})\s?kw', text_lower)
+
             power_kw = power_kw_match.group(1) if power_kw_match else None
 
 
@@ -113,7 +102,9 @@ for root, dirs, files in os.walk(manual_path):
             kerb_weight = None
 
             for pattern in kerb_patterns:
+
                 m = re.search(pattern, text_lower)
+
                 if m:
                     kerb_weight = m.group(1)
                     break
@@ -132,7 +123,9 @@ for root, dirs, files in os.walk(manual_path):
             gross_weight = None
 
             for pattern in gross_patterns:
+
                 m = re.search(pattern, text_lower)
+
                 if m:
                     gross_weight = m.group(1)
                     break
@@ -157,14 +150,14 @@ for root, dirs, files in os.walk(manual_path):
                 engine_type = "single-cylinder"
 
 
-            # FUEL
+            # FUEL TYPE
             fuel = "Petrol"
 
             if "electric motor" in text_lower or "electric drive" in text_lower:
                 fuel = "Electric"
 
 
-            # CALCULATE HP
+            # CALCULATE HP FROM KW
             if horsepower is None and power_kw:
                 horsepower = round(int(power_kw) * 1.341)
 
@@ -176,7 +169,7 @@ for root, dirs, files in os.walk(manual_path):
 
                     kw = int(kerb_weight)
 
-                    if kw < 150 or kw > 350:
+                    if kw < 120 or kw > 400:
                         kerb_weight = None
 
                 if kerb_weight and gross_weight:
@@ -205,19 +198,26 @@ for root, dirs, files in os.walk(manual_path):
             }
 
             specs.append(data)
+
             processed_models.add(clean_model)
 
             print("Processed:", clean_model)
 
         except Exception as e:
+
             print("Error processing:", file)
+            print(e)
 
 
 print("\nSaving database...")
 
 with open("motorcycle_specs_database.json", "w") as f:
+
     json.dump(specs, f, indent=4)
 
-print("Done.")
+
+print("Database created successfully.")
+
+print(f"Total models processed: {len(specs)}")
 
 input("Press Enter to exit...")
