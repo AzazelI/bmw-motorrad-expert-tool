@@ -144,7 +144,7 @@
         "fuel": "Petrol"
     },
     {
-        "model": "K1600GTL_K1600GTL",
+        "model": "K1600GTL_K48",
         "source_file": "K1600GTL_K48.pdf",
         "engine_cc": "1649",
         "power_kw": "118",
@@ -156,7 +156,7 @@
         "fuel": "Petrol"
     },
     {
-        "model": "K1600GT_K1600GT",
+        "model": "K1600GT_K48",
         "source_file": "K1600GT_K48.pdf",
         "engine_cc": "1649",
         "power_kw": "118",
