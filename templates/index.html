@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
@@ -14,103 +15,57 @@
 BMW Motorrad Expert Tool
 </div>
 
+<div class="search-box">
 <input id="search" placeholder="Enter model or chassis (K63 / S1000R)">
+<button class="search-btn" onclick="search()">🔍</button>
+</div>
 
-<button onclick="search()">Search</button>
+<button class="main-search" onclick="search()">Search</button>
+
+<div class="actions">
+
+<button class="action" onclick="toggleAdvanced()">🔎 Advanced Search</button>
+
+<button class="action" onclick="showRecent()">🕘 Recent Searches</button>
+
+<button class="action" onclick="window.location.href='/about'">ℹ About</button>
+
+</div>
+
+<div class="bottom-actions">
+
+<button class="box docs" onclick="window.location.href='/docs'">
+<img src="/static/m-logo.png">
+Docs
+</button>
+
+<button class="box" onclick="window.location.href='/support'">
+🎧 Support
+</button>
+
+<button class="box" onclick="window.location.href='/about'">
+ℹ About
+</button>
+
+</div>
+
+<div id="advancedPanel" style="display:none; margin-top:20px;">
+
+<select id="engineFilter">
+<option value="">Engine capacity</option>
+<option value="1000">1000 cc</option>
+<option value="1250">1250 cc</option>
+</select>
+
+<button onclick="advancedSearch()">Apply</button>
+
+</div>
 
 <div id="result" class="result"></div>
 
 </div>
 
-<script>
-
-// allow ENTER key search
-document.getElementById("search").addEventListener("keypress", function(e){
-if(e.key === "Enter"){
-search()
-}
-})
-
-async function search(){
-
-let query=document.getElementById("search").value.trim()
-
-if(!query){
-return
-}
-
-let res=await fetch("/search",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({query:query})
-})
-
-let data=await res.json()
-
-if(data.error){
-document.getElementById("result").innerHTML="<p>Model not found</p>"
-return
-}
-
-let html=""
-
-data.forEach(bike => {
-
-html += `
-
-<h3>${bike.model}</h3>
-
-<div class="spec">
-<span>Engine capacity</span>
-<span>${bike.engine_cc || "N/A"} cc</span>
-</div>
-
-<div class="spec">
-<span>Power</span>
-<span>${bike.power_kw || "N/A"} kW</span>
-</div>
-
-<div class="spec">
-<span>Horsepower</span>
-<span>${bike.horsepower || "N/A"} hp</span>
-</div>
-
-<div class="spec">
-<span>Kerb weight</span>
-<span>${bike.kerb_weight_kg || "N/A"} kg</span>
-</div>
-
-<div class="spec">
-<span>Gross weight</span>
-<span>${bike.gross_weight_kg || "N/A"} kg</span>
-</div>
-
-<div class="spec">
-<span>Payload</span>
-<span>${bike.payload_kg || "N/A"} kg</span>
-</div>
-
-<div class="spec">
-<span>Engine type</span>
-<span>${bike.engine_type || "N/A"}</span>
-</div>
-
-<div class="spec">
-<span>Fuel</span>
-<span>${bike.fuel || "N/A"}</span>
-</div>
-
-<hr>
-
-`
-
-})
-
-document.getElementById("result").innerHTML = html
-
-}
-
-</script>
+<script src="/static/script.js"></script>
 
 </body>
 </html>

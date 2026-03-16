@@ -1,5 +1,13 @@
 body{
-background:linear-gradient(180deg,#0a0c10,#11151c);
+
+background:
+linear-gradient(rgba(5,10,20,0.85),rgba(5,10,20,0.95)),
+url("/static/m1000rr-bg.png");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+
 font-family:Segoe UI,Arial;
 color:white;
 margin:0;
@@ -7,73 +15,277 @@ display:flex;
 align-items:center;
 justify-content:center;
 height:100vh;
+overflow:hidden;
+
 }
+
+/* subtle headlight glow */
+
+body::before{
+
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+
+background:
+radial-gradient(circle at center,
+rgba(0,120,255,0.15),
+transparent 60%);
+
+pointer-events:none;
+
+}
+
+/* MAIN CARD */
 
 .container{
-width:520px;
-background:#171b22;
-padding:40px;
-border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.7);
+
+width:600px;
+
+background:rgba(20,25,40,0.65);
+backdrop-filter:blur(12px);
+
+padding:45px;
+
+border-radius:14px;
+
+box-shadow:0 20px 60px rgba(0,0,0,0.8);
+
 text-align:center;
+
+border:1px solid rgba(255,255,255,0.06);
+
+position:relative;
+z-index:2;
+
 }
 
+/* TITLE */
+
 .title{
-font-size:26px;
+
+font-size:28px;
 font-weight:600;
 margin-bottom:25px;
 letter-spacing:1px;
+
 }
 
-input{
-width:100%;
+/* SEARCH */
+
+.search-box{
+
+display:flex;
+margin-bottom:15px;
+
+}
+
+.search-box input{
+
+flex:1;
 padding:14px;
+
 border:none;
-border-radius:6px;
+border-radius:6px 0 0 6px;
+
 background:#222733;
 color:white;
 font-size:16px;
-margin-bottom:15px;
+
 outline:none;
+
 }
 
-button{
+.search-btn{
+
+width:50px;
+border-radius:0 6px 6px 0;
+
+background:#1c69d4;
+border:none;
+color:white;
+cursor:pointer;
+
+}
+
+/* MAIN SEARCH BUTTON */
+
+.main-search{
+
+margin-top:5px;
+
 background:#2e8cff;
 border:none;
-padding:12px 28px;
+padding:12px 30px;
+
 color:white;
 font-weight:600;
+
 border-radius:6px;
 cursor:pointer;
+
 transition:0.2s;
+
 }
 
-button:hover{
+.main-search:hover{
+
 background:#1f6fe0;
+
 }
+
+/* ACTION BUTTONS */
+
+.actions{
+
+margin-top:20px;
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+
+}
+
+.action{
+
+background:#1f2430;
+border:1px solid #2d3444;
+
+padding:10px;
+border-radius:8px;
+
+cursor:pointer;
+
+transition:0.2s;
+
+color:white;
+
+}
+
+.action:hover{
+
+border-color:#2e8cff;
+background:#262d3b;
+
+}
+
+/* BOTTOM BOXES */
+
+.bottom-actions{
+
+margin-top:30px;
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+
+}
+
+.box{
+
+background:#141822;
+
+padding:18px;
+
+border-radius:10px;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+gap:8px;
+
+cursor:pointer;
+
+border:1px solid #262d3b;
+
+transition:0.2s;
+
+color:white;
+
+}
+
+.box:hover{
+
+border-color:#2e8cff;
+
+transform:translateY(-3px);
+
+background:#1b2130;
+
+}
+
+/* BMW M LOGO */
+
+.docs img{
+
+width:38px;
+
+}
+
+/* RESULT AREA */
 
 .result{
+
 margin-top:35px;
 text-align:left;
+
 }
 
 .result h3{
+
 border-bottom:1px solid #2a2f3b;
 padding-bottom:10px;
 margin-bottom:15px;
+
 }
 
+/* SPEC ROW */
+
 .spec{
+
 display:flex;
 justify-content:space-between;
 padding:6px 0;
 font-size:15px;
+
 }
 
 .spec span:first-child{
+
 color:#9aa0a6;
+
 }
 
 .spec span:last-child{
+
 font-weight:500;
+
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+.container{
+
+width:90%;
+padding:30px;
+
+}
+
+.actions{
+
+grid-template-columns:1fr;
+
+}
+
+.bottom-actions{
+
+grid-template-columns:1fr;
+
+}
+
 }
