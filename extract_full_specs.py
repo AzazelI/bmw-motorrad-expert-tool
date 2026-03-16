@@ -5,7 +5,7 @@ import json
 
 manual_path = r"D:\BMW_MOTORRAD_AI\BMW_MOTORRAD_MANUALS"
 
-print("BMW MOTORRAD SPEC EXTRACTOR v8")
+print("BMW MOTORRAD SPEC EXTRACTOR v9")
 print("--------------------------------")
 
 
@@ -21,17 +21,24 @@ def normalize_filename(filename):
     name = name.replace(" - ", "_")
     name = name.replace(" ", "")
 
-    # detect chassis codes (K63, K67 etc.)
-    chassis_match = re.search(r'K\d{2}', name.upper())
-    chassis = chassis_match.group(0) if chassis_match else None
+    name = name.upper()
 
-    # detect model (S1000RR, R1250GS etc.)
-    model_match = re.match(r'[A-Z]+\d+[A-Z]*', name.upper())
+    parts = name.split("_")
 
-    model = model_match.group(0) if model_match else name.upper()
+    model = parts[0]
 
-    if chassis:
-        return f"{model}_{chassis}"
+    variant = None
+
+    # detect chassis / variant (K63, KA1, KA2 etc.)
+    for p in parts:
+
+        if re.match(r"K[A-Z0-9]{2,3}", p):
+
+            variant = p
+            break
+
+    if variant:
+        return f"{model}_{variant}"
 
     return model
 
@@ -143,7 +150,7 @@ for root, dirs, files in os.walk(manual_path):
             if "four-cylinder" in text_lower or "inline four" in text_lower:
                 engine_type = "4-cylinder"
 
-            elif "two-cylinder" in text_lower or "2-cylinder" in text_lower or "boxer" in text_lower:
+            elif "two-cylinder" in text_lower or "boxer" in text_lower:
                 engine_type = "2-cylinder"
 
             elif "single-cylinder" in text_lower:
@@ -181,7 +188,6 @@ for root, dirs, files in os.walk(manual_path):
                 pass
 
 
-            # SAVE DATA
             data = {
 
                 "model": clean_model,
@@ -217,7 +223,6 @@ with open("motorcycle_specs_database.json", "w") as f:
 
 
 print("Database created successfully.")
-
-print(f"Total models processed: {len(specs)}")
+print("Total models:", len(specs))
 
 input("Press Enter to exit...")

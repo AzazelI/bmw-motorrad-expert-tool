@@ -1,66 +1,42 @@
-from flask import Flask, render_template, request, jsonify
 import json
 
-app = Flask(__name__)
+print("\nBMW MOTORRAD EXPERT TOOL")
+print("------------------------")
 
-# LOAD DATABASE
-with open("motorcycle_specs_database.json", "r", encoding="utf-8") as f:
-    database = json.load(f)
+search = input("Enter chassis code OR model (example: K67 or S1000RR): ").strip().upper()
 
-# HOME PAGE
-@app.route("/")
-def home():
-    return render_template("index.html")
+with open("motorcycle_specs_database.json","r") as f:
+    data = json.load(f)
 
-# SEARCH
-@app.route("/search", methods=["POST"])
-def search():
+results = []
 
-    query = request.json.get("query","").strip().upper()
+for item in data:
 
-    if not query:
-        return jsonify({"error":"Empty query"})
+    model = item.get("model","").upper()
 
-    results = []
+    if search in model:
+        results.append(item)
 
-    for bike in database:
+if not results:
 
-        model = bike.get("model","").upper()
+    print("\nModel not found in database.")
 
-        parts = model.split("_")
+else:
 
-        model_name = parts[0] if len(parts) > 0 else ""
-        chassis = parts[1] if len(parts) > 1 else ""
+    for found in results:
 
-        if query == model or query == model_name or query == chassis:
+        print("\n==============================")
+        print("MODEL:", found.get("model"))
 
-            results.append({
+        print("\n--- TECHNICAL DATA ---")
 
-                "model": bike.get("model"),
-                "engine_cc": bike.get("engine_cc"),
-                "power_kw": bike.get("power_kw"),
-                "horsepower": bike.get("horsepower"),
+        print("Engine capacity:", found.get("engine_cc"),"cc")
+        print("Power:", found.get("power_kw"),"kW")
+        print("Horsepower:", found.get("horsepower"),"hp")
+        print("Kerb weight:", found.get("kerb_weight_kg"),"kg")
+        print("Gross weight:", found.get("gross_weight_kg"),"kg")
+        print("Payload:", found.get("payload_kg"),"kg")
+        print("Engine type:", found.get("engine_type"))
+        print("Fuel:", found.get("fuel"))
 
-                # IMPORTANT FIX
-                "kerb_weight_kg": bike.get("kerb_weight_kg"),
-                "gross_weight_kg": bike.get("gross_weight_kg"),
-                "payload_kg": bike.get("payload_kg"),
-
-                "engine_type": bike.get("engine_type"),
-                "fuel": bike.get("fuel")
-
-            })
-
-    if not results:
-        return jsonify({"error":"Model not found"})
-
-    return jsonify(results)
-
-if __name__ == "__main__":
-
-    print("\nBMW MOTORRAD EXPERT WEB APP")
-    print("---------------------------")
-    print("Server running at:")
-    print("http://127.0.0.1:5000\n")
-
-    app.run(debug=True)
+input("\nPress Enter to exit...")
