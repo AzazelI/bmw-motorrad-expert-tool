@@ -1,7 +1,7 @@
 body{
 
 background:
-linear-gradient(rgba(5,10,20,0.85),rgba(5,10,20,0.95)),
+linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.3)),
 url("/static/m1000rr-bg.png");
 
 background-size:cover;
