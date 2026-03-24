@@ -1,69 +1,70 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 
 <head>
-<title>BMW Motorrad Expert Tool</title>
-<link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <title>BMW Motorrad Expert Tool</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
 
+<!-- BACKGROUND GLOW -->
+<div class="overlay"></div>
+
 <div class="container">
 
-<div class="title">
-BMW Motorrad Expert Tool
-</div>
+    <div class="title">
+        BMW Motorrad Expert Tool
+    </div>
 
-<div class="search-box">
-<input id="search" placeholder="Enter model or chassis (K63 / S1000R)">
-<button class="search-btn" onclick="search()">🔍</button>
-</div>
+    <div class="search-box">
+        <input id="search" placeholder="Enter model or chassis (K63 / S1000R)">
+        <button class="search-btn" onclick="search()">🔍</button>
+    </div>
 
-<button class="main-search" onclick="search()">Search</button>
+    <button class="main-search" onclick="search()">Search</button>
 
-<div class="actions">
+    <div class="actions">
+        <button class="action" onclick="toggleAdvanced()">🔎 Advanced Search</button>
+        <button class="action" onclick="showRecent()">🕘 Recent Searches</button>
+        <button class="action" onclick="window.location.href='/about'">ℹ About</button>
+    </div>
 
-<button class="action" onclick="toggleAdvanced()">🔎 Advanced Search</button>
+    <div class="bottom-actions">
+        <button class="box docs" onclick="window.location.href='/docs'">
+            <img src="/static/m-logo.png">
+            Docs
+        </button>
 
-<button class="action" onclick="showRecent()">🕘 Recent Searches</button>
+        <button class="box" onclick="window.location.href='/support'">
+            🎧 Support
+        </button>
 
-<button class="action" onclick="window.location.href='/about'">ℹ About</button>
+        <button class="box" onclick="window.location.href='/about'">
+            ℹ About
+        </button>
+    </div>
 
-</div>
+    <div id="advancedPanel" class="advanced-panel">
+        <select id="engineFilter">
+            <option value="">Engine capacity</option>
+            <option value="1000">1000 cc</option>
+            <option value="1250">1250 cc</option>
+        </select>
 
-<div class="bottom-actions">
+        <button onclick="advancedSearch()">Apply</button>
+    </div>
 
-<button class="box docs" onclick="window.location.href='/docs'">
-<img src="/static/m-logo.png">
-Docs
-</button>
-
-<button class="box" onclick="window.location.href='/support'">
-🎧 Support
-</button>
-
-<button class="box" onclick="window.location.href='/about'">
-ℹ About
-</button>
-
-</div>
-
-<div id="advancedPanel" style="display:none; margin-top:20px;">
-
-<select id="engineFilter">
-<option value="">Engine capacity</option>
-<option value="1000">1000 cc</option>
-<option value="1250">1250 cc</option>
-</select>
-
-<button onclick="advancedSearch()">Apply</button>
+    <div id="result" class="result"></div>
 
 </div>
 
-<div id="result" class="result"></div>
-
-</div>
+<!-- 🔥 BMW M STYLE SIGNATURE -->
+<footer class="creator">
+    <span>Created By</span>
+    <strong>G. Jananashvili</strong>
+</footer>
 
 <script src="/static/script.js"></script>
 

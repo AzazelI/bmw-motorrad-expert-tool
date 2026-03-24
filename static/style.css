@@ -1,291 +1,363 @@
-body{
+/* ========================= */
+/* RESET */
+/* ========================= */
 
-background:
-linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.3)),
-url("/static/m1000rr-bg.png");
-
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
-
-font-family:Segoe UI,Arial;
-color:white;
-margin:0;
-display:flex;
-align-items:center;
-justify-content:center;
-height:100vh;
-overflow:hidden;
-
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* subtle headlight glow */
+/* ========================= */
+/* BODY */
+/* ========================= */
 
-body::before{
+body {
 
-content:"";
-position:absolute;
-width:100%;
-height:100%;
+    background:
+    linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.35)),
+    url("/static/m1000rr-bg.png");
 
-background:
-radial-gradient(circle at center,
-rgba(0,120,255,0.15),
-transparent 60%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
-pointer-events:none;
+    font-family: Segoe UI, Arial, sans-serif;
+    color: white;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 100vh;
+    overflow: visible;
+
+    animation: fadeIn 1s ease-in-out;
 }
 
+/* BACKGROUND GLOW */
+
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center,
+        rgba(0,120,255,0.12),
+        transparent 70%);
+    z-index: 0;
+}
+
+/* EXTRA LIGHT */
+
+body::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    background:
+    radial-gradient(circle at center,
+    rgba(0,120,255,0.2),
+    transparent 60%);
+
+    pointer-events: none;
+}
+
+/* ========================= */
 /* MAIN CARD */
+/* ========================= */
 
-.container{
+.container {
 
-width:600px;
+    width: 600px;
 
-background:rgba(20,25,40,0.65);
-backdrop-filter:blur(12px);
+    background: rgba(20,25,40,0.75);
+    backdrop-filter: blur(18px);
 
-padding:45px;
+    padding: 45px;
 
-border-radius:14px;
+    border-radius: 16px;
 
-box-shadow:0 20px 60px rgba(0,0,0,0.8);
+    box-shadow: 0 30px 90px rgba(0,0,0,0.95);
 
-text-align:center;
+    text-align: center;
 
-border:1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
 
-position:relative;
-z-index:2;
-
+    position: relative;
+    z-index: 2;
 }
 
+/* ========================= */
 /* TITLE */
+/* ========================= */
 
-.title{
+.title {
 
-font-size:28px;
-font-weight:600;
-margin-bottom:25px;
-letter-spacing:1px;
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    letter-spacing: 1.5px;
 
+    text-shadow: 0 0 12px rgba(46,140,255,0.25);
 }
 
+/* ========================= */
 /* SEARCH */
+/* ========================= */
 
-.search-box{
+.search-box {
 
-display:flex;
-margin-bottom:15px;
-
+    display: flex;
+    margin-bottom: 15px;
 }
 
-.search-box input{
+.search-box input {
 
-flex:1;
-padding:14px;
+    flex: 1;
+    padding: 14px;
 
-border:none;
-border-radius:6px 0 0 6px;
+    border: none;
+    border-radius: 8px 0 0 8px;
 
-background:#222733;
-color:white;
-font-size:16px;
+    background: #222733;
+    color: white;
+    font-size: 16px;
 
-outline:none;
-
+    outline: none;
+    transition: 0.3s;
 }
 
-.search-btn{
+.search-box input:focus {
 
-width:50px;
-border-radius:0 6px 6px 0;
-
-background:#1c69d4;
-border:none;
-color:white;
-cursor:pointer;
-
+    box-shadow: 0 0 14px rgba(46,140,255,0.8);
+    background: #262c3b;
 }
 
-/* MAIN SEARCH BUTTON */
+/* SEARCH BUTTON */
 
-.main-search{
+.search-btn {
 
-margin-top:5px;
+    width: 55px;
+    border-radius: 0 8px 8px 0;
 
-background:#2e8cff;
-border:none;
-padding:12px 30px;
+    background: linear-gradient(135deg, #2e8cff, #1c69d4);
+    border: none;
 
-color:white;
-font-weight:600;
+    color: white;
+    cursor: pointer;
 
-border-radius:6px;
-cursor:pointer;
-
-transition:0.2s;
-
+    transition: 0.3s;
+    box-shadow: 0 0 12px rgba(46,140,255,0.3);
 }
 
-.main-search:hover{
+.search-btn:hover {
 
-background:#1f6fe0;
-
+    box-shadow: 0 0 22px rgba(46,140,255,0.8);
+    transform: translateY(-1px);
 }
 
-/* ACTION BUTTONS */
+/* ========================= */
+/* MAIN BUTTON */
+/* ========================= */
 
-.actions{
+.main-search {
 
-margin-top:20px;
+    margin-top: 5px;
 
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
+    background: linear-gradient(135deg, #2e8cff, #1f6fe0);
+    border: none;
+    padding: 12px 30px;
 
+    color: white;
+    font-weight: 600;
+
+    border-radius: 8px;
+    cursor: pointer;
+
+    transition: 0.3s;
+    box-shadow: 0 0 12px rgba(46,140,255,0.3);
 }
 
-.action{
+.main-search:hover {
 
-background:#1f2430;
-border:1px solid #2d3444;
-
-padding:10px;
-border-radius:8px;
-
-cursor:pointer;
-
-transition:0.2s;
-
-color:white;
-
+    box-shadow: 0 0 25px rgba(46,140,255,0.7);
+    transform: translateY(-1px);
 }
 
-.action:hover{
+/* ========================= */
+/* ACTIONS */
+/* ========================= */
 
-border-color:#2e8cff;
-background:#262d3b;
+.actions {
 
+    margin-top: 20px;
+
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
 }
 
+.action {
+
+    background: #1f2430;
+    border: 1px solid #2d3444;
+
+    padding: 10px;
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+    color: white;
+}
+
+.action:hover {
+
+    border-color: #2e8cff;
+    background: #262d3b;
+    transform: translateY(-2px);
+}
+
+/* ========================= */
 /* BOTTOM BOXES */
+/* ========================= */
 
-.bottom-actions{
+.bottom-actions {
 
-margin-top:30px;
+    margin-top: 30px;
 
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 15px;
 }
 
-.box{
+.box {
 
-background:#141822;
+    background: #141822;
 
-padding:18px;
+    padding: 18px;
 
-border-radius:10px;
+    border-radius: 12px;
 
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-gap:8px;
+    gap: 8px;
 
-cursor:pointer;
+    cursor: pointer;
 
-border:1px solid #262d3b;
+    border: 1px solid #262d3b;
 
-transition:0.2s;
-
-color:white;
-
+    transition: all 0.25s ease;
+    color: white;
 }
 
-.box:hover{
+.box:hover {
 
-border-color:#2e8cff;
+    border-color: #2e8cff;
+    transform: translateY(-4px);
+    background: #1b2130;
 
-transform:translateY(-3px);
-
-background:#1b2130;
-
+    box-shadow: 0 15px 35px rgba(0,0,0,0.7);
 }
 
-/* BMW M LOGO */
+/* LOGO */
 
-.docs img{
-
-width:38px;
-
+.docs img {
+    width: 38px;
 }
 
-/* RESULT AREA */
+/* ========================= */
+/* ADVANCED */
+/* ========================= */
 
-.result{
-
-margin-top:35px;
-text-align:left;
-
+.advanced-panel {
+    display: none;
+    margin-top: 20px;
 }
 
-.result h3{
+/* ========================= */
+/* RESULT */
+/* ========================= */
 
-border-bottom:1px solid #2a2f3b;
-padding-bottom:10px;
-margin-bottom:15px;
-
+.result {
+    margin-top: 35px;
+    text-align: left;
 }
 
-/* SPEC ROW */
+/* ========================= */
+/* 🔥 BMW M SIGNATURE */
+/* ========================= */
 
-.spec{
+.creator {
 
-display:flex;
-justify-content:space-between;
-padding:6px 0;
-font-size:15px;
+    position: fixed;
+    top: 20px;
+    left: 25px;
 
+    font-size: 13px;
+    letter-spacing: 1.5px;
+
+    z-index: 9999;
+
+    font-weight: 500;
+
+    background: linear-gradient(90deg,
+        #4FC3F7,
+        #1976D2,
+        #E53935
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    opacity: 0.9;
+    transition: 0.3s;
 }
 
-.spec span:first-child{
-
-color:#9aa0a6;
-
+.creator strong {
+    font-weight: 600;
 }
 
-.spec span:last-child{
-
-font-weight:500;
-
+.creator:hover {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(46,140,255,0.6));
 }
 
+/* ========================= */
+/* ANIMATION */
+/* ========================= */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================= */
 /* MOBILE */
+/* ========================= */
 
 @media(max-width:700px){
 
-.container{
+    .container{
+        width: 90%;
+        padding: 30px;
+    }
 
-width:90%;
-padding:30px;
+    .actions{
+        grid-template-columns: 1fr;
+    }
 
-}
-
-.actions{
-
-grid-template-columns:1fr;
-
-}
-
-.bottom-actions{
-
-grid-template-columns:1fr;
-
-}
-
+    .bottom-actions{
+        grid-template-columns: 1fr;
+    }
 }
