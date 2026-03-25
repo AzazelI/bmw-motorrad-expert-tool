@@ -4,8 +4,8 @@ import os
 
 app = Flask(__name__)
 
-# 🔥 სწორი PATH ბაზაზე
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+# 🔥 ახლა ყველაფერი app-შია
+BASE_DIR = os.path.dirname(__file__)
 DB_PATH = os.path.join(BASE_DIR, "specs_database", "motorcycle_specs_database.json")
 
 print("📂 Loading DB from:", DB_PATH)
@@ -36,7 +36,6 @@ def search():
 
         results = []
 
-        # 🔥 VIN detect (characters 4–7)
         vin_code = None
         if len(query) >= 7:
             vin_code = query[3:7]
@@ -49,19 +48,12 @@ def search():
 
             match = False
 
-            # MODEL
             if query in model:
                 match = True
-
-            # TYPE CODE
             elif query == type_code:
                 match = True
-
-            # VIN DIRECT
             elif query in vin_codes:
                 match = True
-
-            # VIN (4–7 extract)
             elif vin_code and vin_code in vin_codes:
                 match = True
 
