@@ -5,7 +5,7 @@ import json
 
 manual_path = r"D:\BMW_MOTORRAD_AI\BMW_MOTORRAD_MANUALS"
 
-print("BMW MOTORRAD SPEC EXTRACTOR v9")
+print("BMW MOTORRAD SPEC EXTRACTOR v11")
 print("--------------------------------")
 
 
@@ -20,20 +20,16 @@ def normalize_filename(filename):
     name = filename.replace(".pdf", "")
     name = name.replace(" - ", "_")
     name = name.replace(" ", "")
-
     name = name.upper()
 
     parts = name.split("_")
 
     model = parts[0]
-
     variant = None
 
-    # detect chassis / variant (K63, KA1, KA2 etc.)
+    # 🔥 detect chassis / type code
     for p in parts:
-
         if re.match(r"K[A-Z0-9]{2,3}", p):
-
             variant = p
             break
 
@@ -62,7 +58,6 @@ for root, dirs, files in os.walk(manual_path):
         path = os.path.join(root, file)
 
         try:
-
             doc = fitz.open(path)
 
             text = ""
@@ -75,7 +70,9 @@ for root, dirs, files in os.walk(manual_path):
 
             text_lower = clean_text(text)
 
+            # =========================
             # ENGINE CAPACITY
+            # =========================
             engine = re.search(r'(\d{3,4})\s?(cc|cm3|cm³)', text_lower)
 
             if not engine:
@@ -83,72 +80,68 @@ for root, dirs, files in os.walk(manual_path):
 
             engine_cc = engine.group(1) if engine else None
 
-
+            # =========================
             # POWER kW
+            # =========================
             power_kw_match = re.search(r'(\d{2,3})\s?kw', text_lower)
-
             power_kw = power_kw_match.group(1) if power_kw_match else None
 
-
+            # =========================
             # HORSEPOWER
+            # =========================
             horsepower_match = re.search(r'(\d{2,3})\s?hp', text_lower)
-
             horsepower = int(horsepower_match.group(1)) if horsepower_match else None
 
-
+            # =========================
             # KERB WEIGHT
+            # =========================
             kerb_patterns = [
-
                 r'kerb weight.*?(\d{2,3})\s?kg',
                 r'weight ready to ride.*?(\d{2,3})\s?kg',
                 r'road ready weight.*?(\d{2,3})\s?kg',
                 r'unladen weight.*?(\d{2,3})\s?kg'
-
             ]
 
             kerb_weight = None
-
             for pattern in kerb_patterns:
-
                 m = re.search(pattern, text_lower)
-
                 if m:
                     kerb_weight = m.group(1)
                     break
 
-
+            # =========================
             # GROSS WEIGHT
+            # =========================
             gross_patterns = [
-
                 r'permitted total weight.*?(\d{2,3})\s?kg',
                 r'permitted gross weight.*?(\d{2,3})\s?kg',
                 r'gross vehicle weight.*?(\d{2,3})\s?kg',
                 r'maximum permissible weight.*?(\d{2,3})\s?kg'
-
             ]
 
             gross_weight = None
-
             for pattern in gross_patterns:
-
                 m = re.search(pattern, text_lower)
-
                 if m:
                     gross_weight = m.group(1)
                     break
 
-
+            # =========================
             # PAYLOAD
+            # =========================
             payload_match = re.search(r'payload.*?(\d{2,3})\s?kg', text_lower)
-
             payload = payload_match.group(1) if payload_match else None
 
-
-            # ENGINE TYPE
+            # =========================
+            # 🔥 ENGINE TYPE (FIXED)
+            # =========================
             engine_type = None
 
             if "four-cylinder" in text_lower or "inline four" in text_lower:
                 engine_type = "4-cylinder"
+
+            elif "parallel twin" in text_lower:
+                engine_type = "2-cylinder"
 
             elif "two-cylinder" in text_lower or "boxer" in text_lower:
                 engine_type = "2-cylinder"
@@ -156,41 +149,49 @@ for root, dirs, files in os.walk(manual_path):
             elif "single-cylinder" in text_lower:
                 engine_type = "single-cylinder"
 
-
-            # FUEL TYPE
+            # =========================
+            # FUEL
+            # =========================
             fuel = "Petrol"
 
             if "electric motor" in text_lower or "electric drive" in text_lower:
                 fuel = "Electric"
 
-
-            # CALCULATE HP FROM KW
+            # =========================
+            # HP CALC
+            # =========================
             if horsepower is None and power_kw:
                 horsepower = round(int(power_kw) * 1.341)
 
-
+            # =========================
             # SANITY CHECK
+            # =========================
             try:
-
                 if kerb_weight:
-
                     kw = int(kerb_weight)
-
                     if kw < 120 or kw > 400:
                         kerb_weight = None
 
                 if kerb_weight and gross_weight:
-
                     if int(kerb_weight) >= int(gross_weight):
                         kerb_weight = None
-
             except:
                 pass
 
+            # =========================
+            # 🔥 SPLIT MODEL + TYPE CODE
+            # =========================
+            model_name = clean_model
+            type_code = None
+
+            if "_" in clean_model:
+                parts = clean_model.split("_")
+                model_name = parts[0]
+                type_code = parts[1]
 
             data = {
-
-                "model": clean_model,
+                "model": model_name,
+                "type_code": type_code,
                 "source_file": file,
                 "engine_cc": engine_cc,
                 "power_kw": power_kw,
@@ -200,17 +201,14 @@ for root, dirs, files in os.walk(manual_path):
                 "payload_kg": payload,
                 "engine_type": engine_type,
                 "fuel": fuel
-
             }
 
             specs.append(data)
-
             processed_models.add(clean_model)
 
             print("Processed:", clean_model)
 
         except Exception as e:
-
             print("Error processing:", file)
             print(e)
 
@@ -218,9 +216,7 @@ for root, dirs, files in os.walk(manual_path):
 print("\nSaving database...")
 
 with open("motorcycle_specs_database.json", "w") as f:
-
     json.dump(specs, f, indent=4)
-
 
 print("Database created successfully.")
 print("Total models:", len(specs))

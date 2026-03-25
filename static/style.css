@@ -9,11 +9,10 @@
 }
 
 /* ========================= */
-/* BODY (CENTER + SCROLL FIX) */
+/* BODY */
 /* ========================= */
 
 body {
-
     background:
     linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.35)),
     url("/static/m1000rr-bg.png");
@@ -27,7 +26,7 @@ body {
     color: white;
 
     display: flex;
-    align-items: center; /* 🔥 ცენტრში */
+    align-items: center;
     justify-content: center;
 
     min-height: 100vh;
@@ -36,7 +35,9 @@ body {
     animation: fadeIn 1s ease-in-out;
 }
 
-/* BACKGROUND GLOW */
+/* ========================= */
+/* BACKGROUND EFFECTS */
+/* ========================= */
 
 .overlay {
     position: fixed;
@@ -48,19 +49,15 @@ body {
     z-index: 0;
 }
 
-/* EXTRA LIGHT */
-
 body::before {
     content: "";
     position: fixed;
     width: 100%;
     height: 100%;
-
     background:
     radial-gradient(circle at center,
     rgba(0,120,255,0.2),
     transparent 60%);
-
     pointer-events: none;
     z-index: 0;
 }
@@ -70,26 +67,17 @@ body::before {
 /* ========================= */
 
 .container {
-
     width: 600px;
-
     background: rgba(20,25,40,0.75);
     backdrop-filter: blur(18px);
-
     padding: 45px;
-
     border-radius: 16px;
-
     box-shadow: 0 30px 90px rgba(0,0,0,0.95);
-
     text-align: center;
-
     border: 1px solid rgba(255,255,255,0.06);
-
     position: relative;
     z-index: 2;
-
-    margin: 60px 0; /* 🔥 FIX */
+    margin: 60px 0;
 }
 
 /* ========================= */
@@ -97,12 +85,10 @@ body::before {
 /* ========================= */
 
 .title {
-
     font-size: 30px;
     font-weight: 600;
     margin-bottom: 25px;
     letter-spacing: 1.5px;
-
     text-shadow: 0 0 12px rgba(46,140,255,0.25);
 }
 
@@ -111,52 +97,39 @@ body::before {
 /* ========================= */
 
 .search-box {
-
     display: flex;
     margin-bottom: 15px;
 }
 
 .search-box input {
-
     flex: 1;
     padding: 14px;
-
     border: none;
     border-radius: 8px 0 0 8px;
-
     background: #222733;
     color: white;
     font-size: 16px;
-
     outline: none;
     transition: 0.3s;
 }
 
 .search-box input:focus {
-
     box-shadow: 0 0 14px rgba(46,140,255,0.8);
     background: #262c3b;
 }
 
-/* SEARCH BUTTON */
-
 .search-btn {
-
     width: 55px;
     border-radius: 0 8px 8px 0;
-
     background: linear-gradient(135deg, #2e8cff, #1c69d4);
     border: none;
-
     color: white;
     cursor: pointer;
-
     transition: 0.3s;
     box-shadow: 0 0 12px rgba(46,140,255,0.3);
 }
 
 .search-btn:hover {
-
     box-shadow: 0 0 22px rgba(46,140,255,0.8);
     transform: translateY(-1px);
 }
@@ -166,121 +139,94 @@ body::before {
 /* ========================= */
 
 .main-search {
-
     margin-top: 5px;
-
     background: linear-gradient(135deg, #2e8cff, #1f6fe0);
     border: none;
     padding: 12px 30px;
-
     color: white;
     font-weight: 600;
-
     border-radius: 8px;
     cursor: pointer;
-
     transition: 0.3s;
     box-shadow: 0 0 12px rgba(46,140,255,0.3);
 }
 
 .main-search:hover {
-
     box-shadow: 0 0 25px rgba(46,140,255,0.7);
     transform: translateY(-1px);
 }
 
 /* ========================= */
-/* ACTIONS */
+/* ACTION BUTTONS */
 /* ========================= */
 
 .actions {
-
-    margin-top: 20px;
-
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 10px;
-}
-
-.action {
-
-    background: #1f2430;
-    border: 1px solid #2d3444;
-
-    padding: 10px;
-    border-radius: 10px;
-
-    cursor: pointer;
-
-    transition: all 0.25s ease;
-    color: white;
-}
-
-.action:hover {
-
-    border-color: #2e8cff;
-    background: #262d3b;
-    transform: translateY(-2px);
-}
-
-/* ========================= */
-/* BOTTOM BOXES */
-/* ========================= */
-
-.bottom-actions {
-
-    margin-top: 30px;
-
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 15px;
-}
-
-.box {
-
-    background: #141822;
-
-    padding: 18px;
-
-    border-radius: 12px;
-
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn.secondary {
+    background: rgba(255,255,255,0.08);
+    color: white;
+    backdrop-filter: blur(6px);
+    transition: 0.3s;
+}
+
+.btn.secondary:hover {
+    background: rgba(255,255,255,0.18);
+}
+
+/* ========================= */
+/* CARDS */
+/* ========================= */
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.card {
+    width: 130px;
+    height: 90px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    display: flex;
     align-items: center;
     justify-content: center;
-
-    gap: 8px;
-
     cursor: pointer;
+    transition: 0.25s;
+}
 
-    border: 1px solid #262d3b;
+.card:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-3px);
+}
 
-    transition: all 0.25s ease;
+/* ========================= */
+/* VIN HINT */
+/* ========================= */
+
+.vin-hint {
+    font-size: 13px;
+    color: #9fc3ff;
+    margin-top: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.vin-hint:hover {
     color: white;
-}
-
-.box:hover {
-
-    border-color: #2e8cff;
-    transform: translateY(-4px);
-    background: #1b2130;
-
-    box-shadow: 0 15px 35px rgba(0,0,0,0.7);
-}
-
-/* LOGO */
-
-.docs img {
-    width: 38px;
-}
-
-/* ========================= */
-/* ADVANCED */
-/* ========================= */
-
-.advanced-panel {
-    display: none;
-    margin-top: 20px;
 }
 
 /* ========================= */
@@ -292,43 +238,95 @@ body::before {
     text-align: left;
 }
 
+.result h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+/* SPEC */
+
+.spec {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+}
+
+.spec span:first-child {
+    color: #8aa4c8;
+}
+
+.spec span:last-child {
+    font-weight: 500;
+}
+
+.result hr {
+    margin: 15px 0;
+    border: none;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+}
+
 /* ========================= */
-/* 🔥 BMW M SIGNATURE */
+/* MODAL */
+/* ========================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+}
+
+.modal-content {
+    background: #111;
+    margin: 10% auto;
+    padding: 25px;
+    width: 400px;
+    border-radius: 12px;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.close {
+    float: right;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.vin-example {
+    margin: 15px 0;
+    font-family: monospace;
+    background: #000;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.highlight {
+    color: #2e8cff;
+    font-weight: bold;
+}
+
+/* ========================= */
+/* FOOTER */
 /* ========================= */
 
 .creator {
-
     position: fixed;
-    top: 20px;
-    left: 25px;
-
-    font-size: 13px;
-    letter-spacing: 1.5px;
-
-    z-index: 9999;
-
-    font-weight: 500;
-
-    background: linear-gradient(90deg,
-        #4FC3F7,
-        #1976D2,
-        #E53935
-    );
-
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    opacity: 0.9;
-    transition: 0.3s;
+    bottom: 10px;
+    left: 15px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
 }
 
 .creator strong {
-    font-weight: 600;
-}
-
-.creator:hover {
-    opacity: 1;
-    filter: drop-shadow(0 0 6px rgba(46,140,255,0.6));
+    color: #2e8cff;
+    margin-left: 5px;
 }
 
 /* ========================= */
@@ -351,17 +349,16 @@ body::before {
 /* ========================= */
 
 @media(max-width:700px){
-
     .container{
         width: 90%;
         padding: 30px;
     }
 
     .actions{
-        grid-template-columns: 1fr;
+        flex-direction: column;
     }
 
-    .bottom-actions{
-        grid-template-columns: 1fr;
+    .cards{
+        flex-direction: column;
     }
 }

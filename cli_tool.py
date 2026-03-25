@@ -1,42 +1,68 @@
 import json
 
-print("\nBMW MOTORRAD EXPERT TOOL")
-print("------------------------")
+# LOAD DATABASE
+with open("motorcycle_specs_database.json", "r", encoding="utf-8") as f:
+    database = json.load(f)
 
-search = input("Enter chassis code OR model (example: K67 or S1000RR): ").strip().upper()
 
-with open("motorcycle_specs_database.json","r") as f:
-    data = json.load(f)
+def search_bike(query):
+    query = query.strip().upper()
 
-results = []
+    if not query:
+        print("❌ Empty input")
+        return
 
-for item in data:
+    results = []
 
-    model = item.get("model","").upper()
+    # 🔥 FULL VIN SUPPORT
+    vin_code = None
+    if len(query) >= 7:
+        vin_code = query[3:7]
 
-    if search in model:
-        results.append(item)
+    for bike in database:
 
-if not results:
+        model = bike.get("model", "").upper()
+        type_code = bike.get("type_code", "").upper()
+        vin_codes = [v.upper() for v in bike.get("vin_codes", [])]
 
-    print("\nModel not found in database.")
+        if (
+            query in model
+            or query == type_code
+            or (vin_code and vin_code in vin_codes)
+            or query in vin_codes
+        ):
+            results.append(bike)
 
-else:
+    if not results:
+        print("❌ Model not found")
+        return
 
-    for found in results:
-
+    # PRINT RESULTS
+    for bike in results:
         print("\n==============================")
-        print("MODEL:", found.get("model"))
+        print(f"🏍 Model: {bike.get('model')}")
+        print(f"🔧 Type Code: {bike.get('type_code')}")
+        print(f"📄 Manual: {bike.get('source_file')}")
 
-        print("\n--- TECHNICAL DATA ---")
+        print("\n--- Specs ---")
 
-        print("Engine capacity:", found.get("engine_cc"),"cc")
-        print("Power:", found.get("power_kw"),"kW")
-        print("Horsepower:", found.get("horsepower"),"hp")
-        print("Kerb weight:", found.get("kerb_weight_kg"),"kg")
-        print("Gross weight:", found.get("gross_weight_kg"),"kg")
-        print("Payload:", found.get("payload_kg"),"kg")
-        print("Engine type:", found.get("engine_type"))
-        print("Fuel:", found.get("fuel"))
+        print(f"Engine: {bike.get('engine_cc')} cc")
+        print(f"Power: {bike.get('power_kw')} kW")
+        print(f"Horsepower: {bike.get('horsepower')} hp")
+        print(f"Weight: {bike.get('kerb_weight_kg')} kg")
+        print(f"Fuel: {bike.get('fuel')}")
+        print("==============================\n")
 
-input("\nPress Enter to exit...")
+
+# CLI LOOP
+if __name__ == "__main__":
+    print("BMW Motorrad CLI Tool")
+    print("Type model, type code, or VIN (full or 4-digit)\n")
+
+    while True:
+        user_input = input("Search: ")
+
+        if user_input.lower() in ["exit", "quit"]:
+            break
+
+        search_bike(user_input)
