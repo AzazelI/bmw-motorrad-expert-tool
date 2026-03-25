@@ -1,12 +1,20 @@
 from flask import Flask, render_template, request, jsonify
 import json
+import os
 
 app = Flask(__name__)
 
+# 🔥 სწორი PATH ბაზაზე
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+DB_PATH = os.path.join(BASE_DIR, "specs_database", "motorcycle_specs_database.json")
+
+print("📂 Loading DB from:", DB_PATH)
+
 # LOAD DATABASE
 try:
-    with open("motorcycle_specs_database.json", "r", encoding="utf-8") as f:
+    with open(DB_PATH, "r", encoding="utf-8") as f:
         database = json.load(f)
+        print(f"✅ Database loaded: {len(database)} records")
 except Exception as e:
     print("❌ Failed to load database:", e)
     database = []
@@ -28,7 +36,7 @@ def search():
 
         results = []
 
-        # 🔥 detect VIN
+        # 🔥 VIN detect (characters 4–7)
         vin_code = None
         if len(query) >= 7:
             vin_code = query[3:7]
@@ -41,22 +49,25 @@ def search():
 
             match = False
 
+            # MODEL
             if query in model:
                 match = True
 
+            # TYPE CODE
             elif query == type_code:
                 match = True
 
+            # VIN DIRECT
             elif query in vin_codes:
                 match = True
 
+            # VIN (4–7 extract)
             elif vin_code and vin_code in vin_codes:
                 match = True
 
             if match:
                 bike_copy = bike.copy()
 
-                # 🔥 attach detected VIN code
                 if vin_code:
                     bike_copy["detected_vin"] = vin_code
 
