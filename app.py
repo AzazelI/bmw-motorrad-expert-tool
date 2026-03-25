@@ -28,6 +28,7 @@ def search():
 
         results = []
 
+        # 🔥 detect VIN
         vin_code = None
         if len(query) >= 7:
             vin_code = query[3:7]
@@ -36,17 +37,30 @@ def search():
 
             model = str(bike.get("model", "")).upper()
             type_code = str(bike.get("type_code", "")).upper()
+            vin_codes = [str(v).upper() for v in bike.get("vin_codes", [])]
 
-            vin_codes_raw = bike.get("vin_codes") or []
-            vin_codes = [str(v).upper() for v in vin_codes_raw]
+            match = False
 
-            if (
-                query in model
-                or query == type_code
-                or (vin_code and vin_code in vin_codes)
-                or query in vin_codes
-            ):
-                results.append(bike)
+            if query in model:
+                match = True
+
+            elif query == type_code:
+                match = True
+
+            elif query in vin_codes:
+                match = True
+
+            elif vin_code and vin_code in vin_codes:
+                match = True
+
+            if match:
+                bike_copy = bike.copy()
+
+                # 🔥 attach detected VIN code
+                if vin_code:
+                    bike_copy["detected_vin"] = vin_code
+
+                results.append(bike_copy)
 
         if not results:
             return jsonify({"error": "Model not found"})

@@ -5,7 +5,7 @@ import json
 
 manual_path = r"D:\BMW_MOTORRAD_AI\BMW_MOTORRAD_MANUALS"
 
-print("BMW MOTORRAD SPEC EXTRACTOR v11")
+print("BMW MOTORRAD SPEC EXTRACTOR v13")
 print("--------------------------------")
 
 
@@ -27,10 +27,22 @@ def normalize_filename(filename):
     model = parts[0]
     variant = None
 
-    # 🔥 detect chassis / type code
+    # 🔥 SMART TYPE CODE DETECTION
     for p in parts:
+
+        # K series (K66, K50...)
         if re.match(r"K[A-Z0-9]{2,3}", p):
             variant = p
+            break
+
+        # numeric codes (0M63USA → 0M63)
+        if re.match(r"0[A-Z0-9]{3,}", p):
+            variant = p[:4]
+            break
+
+        # A series (A75EURO → A75)
+        if re.match(r"A[0-9]{2,}", p):
+            variant = p[:3]
             break
 
     if variant:
@@ -133,19 +145,16 @@ for root, dirs, files in os.walk(manual_path):
             payload = payload_match.group(1) if payload_match else None
 
             # =========================
-            # 🔥 ENGINE TYPE (FIXED)
+            # ENGINE TYPE
             # =========================
             engine_type = None
 
             if "four-cylinder" in text_lower or "inline four" in text_lower:
                 engine_type = "4-cylinder"
-
             elif "parallel twin" in text_lower:
                 engine_type = "2-cylinder"
-
             elif "two-cylinder" in text_lower or "boxer" in text_lower:
                 engine_type = "2-cylinder"
-
             elif "single-cylinder" in text_lower:
                 engine_type = "single-cylinder"
 
@@ -164,22 +173,7 @@ for root, dirs, files in os.walk(manual_path):
                 horsepower = round(int(power_kw) * 1.341)
 
             # =========================
-            # SANITY CHECK
-            # =========================
-            try:
-                if kerb_weight:
-                    kw = int(kerb_weight)
-                    if kw < 120 or kw > 400:
-                        kerb_weight = None
-
-                if kerb_weight and gross_weight:
-                    if int(kerb_weight) >= int(gross_weight):
-                        kerb_weight = None
-            except:
-                pass
-
-            # =========================
-            # 🔥 SPLIT MODEL + TYPE CODE
+            # CLEAN MODEL + TYPE
             # =========================
             model_name = clean_model
             type_code = None
@@ -215,7 +209,7 @@ for root, dirs, files in os.walk(manual_path):
 
 print("\nSaving database...")
 
-with open("motorcycle_specs_database.json", "w") as f:
+with open("motorcycle_specs_database.json", "w", encoding="utf-8") as f:
     json.dump(specs, f, indent=4)
 
 print("Database created successfully.")

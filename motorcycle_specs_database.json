@@ -26,9 +26,35 @@
         "fuel": "Electric"
     },
     {
+        "model": "CE02",
+        "type_code": "0C73",
+        "source_file": "CE02_CE02_0C73.pdf",
+        "engine_cc": null,
+        "power_kw": "11",
+        "horsepower": 15,
+        "kerb_weight_kg": "132",
+        "gross_weight_kg": "312",
+        "payload_kg": "132",
+        "engine_type": null,
+        "fuel": "Electric"
+    },
+    {
         "model": "CE04",
         "type_code": null,
         "source_file": "CE04_CE04.pdf",
+        "engine_cc": null,
+        "power_kw": "15",
+        "horsepower": 20,
+        "kerb_weight_kg": "231",
+        "gross_weight_kg": "410",
+        "payload_kg": "231",
+        "engine_type": null,
+        "fuel": "Electric"
+    },
+    {
+        "model": "CE04",
+        "type_code": "0C53",
+        "source_file": "CE04_CE04_0C53.pdf",
         "engine_cc": null,
         "power_kw": "15",
         "horsepower": 20,
@@ -222,7 +248,7 @@
     },
     {
         "model": "R12",
-        "type_code": null,
+        "type_code": "0N51",
         "source_file": "R 12 - 0N51 EUR.pdf",
         "engine_cc": "1170",
         "power_kw": "70",
@@ -234,8 +260,21 @@
         "fuel": "Petrol"
     },
     {
+        "model": "R12",
+        "type_code": "0N53",
+        "source_file": "R 12 - 0N53 USA.pdf",
+        "engine_cc": "1170",
+        "power_kw": "70",
+        "horsepower": 94,
+        "kerb_weight_kg": "227",
+        "gross_weight_kg": "430",
+        "payload_kg": "95",
+        "engine_type": "2-cylinder",
+        "fuel": "Petrol"
+    },
+    {
         "model": "R12GS",
-        "type_code": null,
+        "type_code": "0N21",
         "source_file": "R 12 GS - 0N21 EUR.pdf",
         "engine_cc": "1170",
         "power_kw": "80",
@@ -247,8 +286,21 @@
         "fuel": "Petrol"
     },
     {
+        "model": "R12GS",
+        "type_code": "0N23",
+        "source_file": "R 12 GS - 0N23 USA.pdf",
+        "engine_cc": "1170",
+        "power_kw": "80",
+        "horsepower": 107,
+        "kerb_weight_kg": "229",
+        "gross_weight_kg": "430",
+        "payload_kg": "95",
+        "engine_type": "2-cylinder",
+        "fuel": "Petrol"
+    },
+    {
         "model": "R12NINET",
-        "type_code": null,
+        "type_code": "0N03",
         "source_file": "R 12 nineT - 0N03 USA.pdf",
         "engine_cc": "1170",
         "power_kw": "80",
@@ -260,9 +312,22 @@
         "fuel": "Petrol"
     },
     {
+        "model": "R12NINET",
+        "type_code": "0N11",
+        "source_file": "R 12 nineT - 0N11 EUR.pdf",
+        "engine_cc": "1170",
+        "power_kw": "80",
+        "horsepower": 107,
+        "kerb_weight_kg": "220",
+        "gross_weight_kg": "430",
+        "payload_kg": "95",
+        "engine_type": "2-cylinder",
+        "fuel": "Petrol"
+    },
+    {
         "model": "R1300R",
-        "type_code": null,
-        "source_file": "R 1300 R - 0M51 EUR.pdf",
+        "type_code": "A75",
+        "source_file": "R 1300 R - A75 EURO.pdf",
         "engine_cc": "1300",
         "power_kw": "107",
         "horsepower": 143,
@@ -274,8 +339,21 @@
     },
     {
         "model": "R1300RS",
-        "type_code": null,
-        "source_file": "R 1300 RS - 0M61 EUR.pdf",
+        "type_code": "0M63",
+        "source_file": "R 1300 RS - 0M63 USA.pdf",
+        "engine_cc": "1300",
+        "power_kw": "107",
+        "horsepower": 143,
+        "kerb_weight_kg": "245",
+        "gross_weight_kg": "460",
+        "payload_kg": "10",
+        "engine_type": "2-cylinder",
+        "fuel": "Petrol"
+    },
+    {
+        "model": "R1300RS",
+        "type_code": "A75",
+        "source_file": "R 1300 RS - A75.pdf",
         "engine_cc": "1300",
         "power_kw": "107",
         "horsepower": 143,
@@ -287,8 +365,21 @@
     },
     {
         "model": "R1300RT",
-        "type_code": null,
-        "source_file": "R 1300 RT - 0M41 EUR.pdf",
+        "type_code": "0M43",
+        "source_file": "R 1300 RT - 0M43 USA.pdf",
+        "engine_cc": "1300",
+        "power_kw": "107",
+        "horsepower": 143,
+        "kerb_weight_kg": "281",
+        "gross_weight_kg": "510",
+        "payload_kg": "10",
+        "engine_type": "2-cylinder",
+        "fuel": "Petrol"
+    },
+    {
+        "model": "R1300RT",
+        "type_code": "A75",
+        "source_file": "R 1300 RT - A75.pdf",
         "engine_cc": "1300",
         "power_kw": "107",
         "horsepower": 143,
@@ -326,7 +417,7 @@
     },
     {
         "model": "R1200GS",
-        "type_code": null,
+        "type_code": "0A81",
         "source_file": "R 1200 GS - 0A81 EUR.pdf",
         "engine_cc": null,
         "power_kw": null,
@@ -339,7 +430,7 @@
     },
     {
         "model": "R1200GSADVENTURE",
-        "type_code": null,
+        "type_code": "0A02",
         "source_file": "R 1200 GS Adventure - 0A02 EUR.pdf",
         "engine_cc": null,
         "power_kw": null,
@@ -351,8 +442,21 @@
         "fuel": "Petrol"
     },
     {
+        "model": "R1200GSADVENTURE",
+        "type_code": "0A22",
+        "source_file": "R 1200 GS Adventure - 0A22 EUR.pdf",
+        "engine_cc": null,
+        "power_kw": null,
+        "horsepower": null,
+        "kerb_weight_kg": null,
+        "gross_weight_kg": null,
+        "payload_kg": null,
+        "engine_type": null,
+        "fuel": "Petrol"
+    },
+    {
         "model": "R1200RS",
-        "type_code": null,
+        "type_code": "0A05",
         "source_file": "R 1200 RS - 0A05 EUR.pdf",
         "engine_cc": "1170",
         "power_kw": "92",
