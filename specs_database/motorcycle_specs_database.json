@@ -274,7 +274,7 @@
     },
     {
         "model": "R12GS",
-        "type_code": "0N21",
+        "type_code": "KR2",
         "source_file": "R 12 GS - 0N21 EUR.pdf",
         "engine_cc": "1170",
         "power_kw": "80",
@@ -326,7 +326,7 @@
     },
     {
         "model": "R1300R",
-        "type_code": "A75",
+        "type_code": "KA4",
         "source_file": "R 1300 R - A75 EURO.pdf",
         "engine_cc": "1300",
         "power_kw": "107",
@@ -339,7 +339,7 @@
     },
     {
         "model": "R1300RS",
-        "type_code": "0M63",
+        "type_code": "KA5",
         "source_file": "R 1300 RS - 0M63 USA.pdf",
         "engine_cc": "1300",
         "power_kw": "107",
@@ -352,7 +352,7 @@
     },
     {
         "model": "R1300RS",
-        "type_code": "A75",
+        "type_code": "KA6",
         "source_file": "R 1300 RS - A75.pdf",
         "engine_cc": "1300",
         "power_kw": "107",
@@ -365,7 +365,7 @@
     },
     {
         "model": "R1300RT",
-        "type_code": "0M43",
+        "type_code": "KA7",
         "source_file": "R 1300 RT - 0M43 USA.pdf",
         "engine_cc": "1300",
         "power_kw": "107",
