@@ -64,7 +64,7 @@
         "gross_weight_kg": "355",
         "payload_kg": "178",
         "engine_type": null,
-        "fuel": "Electric"
+        "fuel": "Petrol"
     },
     {
         "model": "F750GS",
@@ -77,7 +77,7 @@
         "gross_weight_kg": "440",
         "payload_kg": "227",
         "engine_type": null,
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": [
             "0K51",
             "0B08"
@@ -94,7 +94,7 @@
         "gross_weight_kg": "440",
         "payload_kg": "227",
         "engine_type": null,
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": [
             "0K51",
             "0B08"
@@ -111,7 +111,7 @@
         "gross_weight_kg": "455",
         "payload_kg": "246",
         "engine_type": null,
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": [
             "0R21",
             "0K61"
@@ -128,7 +128,7 @@
         "gross_weight_kg": "445",
         "payload_kg": "219",
         "engine_type": null,
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": "0K71"
     },
     {
@@ -142,7 +142,7 @@
         "gross_weight_kg": "430",
         "payload_kg": "211",
         "engine_type": null,
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": "0K81"
     },
     {
@@ -156,7 +156,7 @@
         "gross_weight_kg": null,
         "payload_kg": "345",
         "engine_type": null,
-        "fuel": "Electric"
+        "fuel": "Petrol"
     },
     {
         "model": "G310R",
@@ -169,7 +169,7 @@
         "gross_weight_kg": null,
         "payload_kg": "345",
         "engine_type": null,
-        "fuel": "Electric"
+        "fuel": "Petrol"
     },
     {
         "model": "R18",
@@ -182,7 +182,7 @@
         "gross_weight_kg": "560",
         "payload_kg": "10",
         "engine_type": "2-cylinder",
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": [
             "0N61",
             "0N71"
@@ -226,8 +226,8 @@
         "kerb_weight_kg": "199",
         "gross_weight_kg": "407",
         "payload_kg": "85",
-        "engine_type": null,
-        "fuel": "Electric",
+        "engine_type": "2-cylinder",
+        "fuel": "Petrol",
         "vin": "0P41"
     },
     {
@@ -240,8 +240,8 @@
         "kerb_weight_kg": "194",
         "gross_weight_kg": "407",
         "payload_kg": "85",
-        "engine_type": null,
-        "fuel": "Electric",
+        "engine_type": "2-cylinder",
+        "fuel": "Petrol",
         "vin": "0P31"
     },
     {
@@ -254,8 +254,8 @@
         "kerb_weight_kg": "223",
         "gross_weight_kg": "450",
         "payload_kg": "85",
-        "engine_type": null,
-        "fuel": "Electric",
+        "engine_type": "2-cylinder",
+        "fuel": "Petrol",
         "vin": "0P11"
     },
     {
@@ -542,7 +542,7 @@
         "gross_weight_kg": "422",
         "payload_kg": "85",
         "engine_type": "single-cylinder",
-        "fuel": "Electric"
+        "fuel": "Petrol"
     },
     {
         "model": "CE02",
@@ -580,7 +580,7 @@
         "kerb_weight_kg": "358",
         "gross_weight_kg": "560",
         "payload_kg": "10",
-        "engine_type": 6-cyinder,
+        "engine_type": "6-cyinder",
         "fuel": "Petrol"
     },
     {
@@ -593,7 +593,7 @@
         "kerb_weight_kg": "358",
         "gross_weight_kg": "560",
         "payload_kg": "10",
-        "engine_type": 6-cylinder,
+        "engine_type": "6-cylinder",
         "fuel": "Petrol"
     },
     {
