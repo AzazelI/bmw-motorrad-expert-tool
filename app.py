@@ -36,7 +36,7 @@ def search():
 
         results = []
 
-        # 🔥 Detect VIN (full VIN -> extract 4-7)
+        # 🔥 Extract VIN code (4–7)
         vin_code = query[3:7] if len(query) >= 7 else query
 
         for bike in database:
@@ -44,33 +44,67 @@ def search():
             model = str(bike.get("model", "")).upper()
             type_code = str(bike.get("type_code", "")).upper()
 
-            # 🔥 SUPPORT BOTH: vin (new) + vin_codes (old)
+            # 🔥 GET VIN DATA (supports old + new)
             vin_data = bike.get("vin", bike.get("vin_codes", []))
 
             # normalize to list
             if isinstance(vin_data, str):
-                vin_list = [vin_data.upper()]
+                vin_list = [vin_data.strip().upper()]
             elif isinstance(vin_data, list):
-                vin_list = [str(v).upper() for v in vin_data]
+                vin_list = [str(v).strip().upper() for v in vin_data]
             else:
                 vin_list = []
 
             match = False
 
+            # =========================
             # 🔍 SEARCH LOGIC
+            # =========================
+
+            # MODEL
             if query in model:
                 match = True
+
+            # TYPE CODE
             elif query == type_code:
                 match = True
+
+            # EXACT VIN MATCH
             elif query in vin_list:
                 match = True
+
+            # EXTRACTED VIN MATCH
             elif vin_code in vin_list:
                 match = True
+
+            # 🔥 ADVANCED VIN MATCH (fix for 0E63 issue)
+            else:
+                for v in vin_list:
+
+                    # remove spaces just in case
+                    v_clean = v.replace(" ", "")
+                    vc_clean = vin_code.replace(" ", "")
+
+                    # exact
+                    if vc_clean == v_clean:
+                        match = True
+                        break
+
+                    # shift fix (0E63 vs E630)
+                    if vc_clean.replace("0", "") == v_clean.replace("0", ""):
+                        match = True
+                        break
+
+                    # partial safety
+                    if vc_clean in v_clean or v_clean in vc_clean:
+                        match = True
+                        break
+
+            # =========================
 
             if match:
                 bike_copy = bike.copy()
 
-                # attach detected VIN (nice UX)
                 if vin_code:
                     bike_copy["detected_vin"] = vin_code
 
