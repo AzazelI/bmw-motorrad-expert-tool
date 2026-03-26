@@ -83,7 +83,7 @@
     {
         "model": "F800GS",
         "type_code": "K80",
-	"vin": "vin": ["0K51", "0B08"],
+	"vin": ["0K51", "0B08"],
         "source_file": "F800GS_K80.pdf",
         "engine_cc": "895",
         "power_kw": "64",
@@ -164,9 +164,8 @@
     },
     {
         "model": "R18",
-	"vin": "0N61",
+	"vin": ["0N61","0N71"],
         "type_code": "K34",
-	"vin": "0N71",
         "source_file": "R18_K34.pdf",
         "engine_cc": "1802",
         "power_kw": "67",
@@ -441,7 +440,7 @@
     {
         "model": "R1200RS",
         "type_code": "K54",
-	"vin": "0N01"
+	"vin": "0N01",
         "source_file": "R 1200 RS - 0A05 EUR.pdf",
         "engine_cc": "1170",
         "power_kw": "92",
