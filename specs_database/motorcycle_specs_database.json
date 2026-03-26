@@ -287,20 +287,6 @@
         "fuel": "Petrol"
     },
     {
-        "model": "R12GS",
-        "type_code": "0N23",
-        "source_file": "R 12 GS - 0N23 USA.pdf",
-        "engine_cc": "1170",
-        "power_kw": "80",
-        "horsepower": 107,
-        "kerb_weight_kg": "229",
-        "gross_weight_kg": "430",
-        "payload_kg": "95",
-        "engine_type": "2-cylinder",
-        "fuel": "Electric",
-        "vin": "0N21"
-    },
-    {
         "model": "R12NINET",
         "type_code": "KR1",
         "vin": "0N01",
@@ -369,19 +355,6 @@
         "fuel": "Petrol"
     },
     {
-        "model": "R1300RT",
-        "type_code": "A75",
-        "source_file": "R 1300 RT - A75.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "281",
-        "gross_weight_kg": "510",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Electric"
-    },
-    {
         "model": "R1300GSADVENTURE",
         "type_code": "KA2",
         "source_file": "R1300GSADVENTURE_KA2.pdf",
@@ -392,7 +365,7 @@
         "gross_weight_kg": "485",
         "payload_kg": "269",
         "engine_type": "2-cylinder",
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": "0M31"
     },
     {
@@ -406,7 +379,7 @@
         "gross_weight_kg": "465",
         "payload_kg": "85",
         "engine_type": "2-cylinder",
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": "0M21"
     },
     {
@@ -487,7 +460,7 @@
         "gross_weight_kg": "505",
         "payload_kg": "10",
         "engine_type": "2-cylinder",
-        "fuel": "Electric"
+        "fuel": "Petrol"
     },
     {
         "model": "R1250R",
@@ -500,7 +473,7 @@
         "gross_weight_kg": "460",
         "payload_kg": "10",
         "engine_type": null,
-        "fuel": "Electric"
+        "fuel": "Petrol"
     },
     {
         "model": "RNINET",
@@ -513,7 +486,7 @@
         "gross_weight_kg": "430",
         "payload_kg": "10",
         "engine_type": "2-cylinder",
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": "0J01"
     },
     {
@@ -527,7 +500,7 @@
         "gross_weight_kg": "407",
         "payload_kg": "85",
         "engine_type": null,
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": "0E63"
     },
     {
@@ -541,7 +514,7 @@
         "gross_weight_kg": "407",
         "payload_kg": "85",
         "engine_type": null,
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": "0P31"
     },
     {
@@ -555,7 +528,7 @@
         "gross_weight_kg": "450",
         "payload_kg": "10",
         "engine_type": null,
-        "fuel": "Electric",
+        "fuel": "Petrol",
         "vin": "0P11"
     },
     {
@@ -607,8 +580,8 @@
         "kerb_weight_kg": "358",
         "gross_weight_kg": "560",
         "payload_kg": "10",
-        "engine_type": null,
-        "fuel": "Electric"
+        "engine_type": 6-cyinder,
+        "fuel": "Petrol"
     },
     {
         "model": "K1600GT",
@@ -620,8 +593,8 @@
         "kerb_weight_kg": "358",
         "gross_weight_kg": "560",
         "payload_kg": "10",
-        "engine_type": null,
-        "fuel": "Electric"
+        "engine_type": 6-cylinder,
+        "fuel": "Petrol"
     },
     {
         "model": "R12",
@@ -634,7 +607,7 @@
         "gross_weight_kg": "430",
         "payload_kg": "95",
         "engine_type": "2-cylinder",
-        "fuel": "Electric"
+        "fuel": "Petrol"
     },
     {
         "model": "R12",
@@ -647,20 +620,7 @@
         "gross_weight_kg": "430",
         "payload_kg": "95",
         "engine_type": "2-cylinder",
-        "fuel": "Electric"
-    },
-    {
-        "model": "R12GS",
-        "type_code": "0N21",
-        "source_file": "R 12 GS - 0N21 EUR.pdf",
-        "engine_cc": "1170",
-        "power_kw": "80",
-        "horsepower": 107,
-        "kerb_weight_kg": "229",
-        "gross_weight_kg": "430",
-        "payload_kg": "95",
-        "engine_type": "2-cylinder",
-        "fuel": "Electric"
+        "fuel": "Petrol"
     },
     {
         "model": "R12NINET",
@@ -673,7 +633,7 @@
         "gross_weight_kg": "430",
         "payload_kg": "95",
         "engine_type": "2-cylinder",
-        "fuel": "Electric"
+        "fuel": "Petrol"
     },
     {
         "model": "R12NINET",
@@ -686,59 +646,7 @@
         "gross_weight_kg": "430",
         "payload_kg": "95",
         "engine_type": "2-cylinder",
-        "fuel": "Electric"
-    },
-    {
-        "model": "R1300R",
-        "type_code": "A75",
-        "source_file": "R 1300 R - A75.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "239",
-        "gross_weight_kg": "460",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Electric"
-    },
-    {
-        "model": "R1300RS",
-        "type_code": "0M63",
-        "source_file": "R 1300 RS - 0M63 USA.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "245",
-        "gross_weight_kg": "460",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Electric"
-    },
-    {
-        "model": "R1300RS",
-        "type_code": "A75",
-        "source_file": "R 1300 RS - A75.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "245",
-        "gross_weight_kg": "460",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Electric"
-    },
-    {
-        "model": "R1300RT",
-        "type_code": "0M43",
-        "source_file": "R 1300 RT - 0M43 USA.pdf",
-        "engine_cc": "1300",
-        "power_kw": "107",
-        "horsepower": 143,
-        "kerb_weight_kg": "281",
-        "gross_weight_kg": "510",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Electric"
+        "fuel": "Petrol"
     },
     {
         "model": "R1200GS",
@@ -764,6 +672,6 @@
         "gross_weight_kg": null,
         "payload_kg": "10",
         "engine_type": "2-cylinder",
-        "fuel": "Electric"
+        "fuel": "Petrol"
     }
 ]
