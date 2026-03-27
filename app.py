@@ -48,9 +48,12 @@ def save_users(users):
         json.dump(users, f, indent=4)
 
 # =========================
-# MOTORCYCLE DB LOAD (🔥 NEW FIX)
+# MOTORCYCLE DB LOAD
 # =========================
 DB_PATH = os.path.join(BASE_DIR, "specs_database", "motorcycle_specs_database.json")
+
+if not os.path.exists(DB_PATH):
+    DB_PATH = os.path.join(BASE_DIR, "motorcycle_specs_database.json")
 
 try:
     with open(DB_PATH, "r", encoding="utf-8") as f:
@@ -75,70 +78,46 @@ def load_user(user_id):
     return None
 
 # =========================
-# REGISTER
+# REGISTER & LOGIN ROUTES
 # =========================
 @app.route("/register", methods=["GET", "POST"])
 @limiter.limit("5 per minute")
 def register():
-
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-
         if not username or not password:
             return render_template("register.html", error="Fill all fields")
-
-        if len(password) < 6:
-            return render_template("register.html", error="Password must be at least 6 characters")
-
         users = load_users()
-
         if username in users:
             return render_template("register.html", error="User already exists")
-
         users[username] = {
             "password": bcrypt.generate_password_hash(password).decode("utf-8"),
             "role": "user"
         }
-
         save_users(users)
-
         return redirect(url_for("login"))
-
     return render_template("register.html")
 
-# =========================
-# LOGIN
-# =========================
 @app.route("/login", methods=["GET", "POST"])
 @limiter.limit("10 per minute")
 def login():
-
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
         remember = True if request.form.get("remember") else False
-
         users = load_users()
-
         if username in users:
             if bcrypt.check_password_hash(users[username]["password"], password):
                 login_user(User(username), remember=remember)
                 return redirect(url_for("home"))
-
         return render_template("login.html", error="Invalid credentials")
-
     return render_template("login.html")
 
-# =========================
-# LOGOUT
-# =========================
 @app.route("/logout")
 @login_required
 def logout():
@@ -146,21 +125,7 @@ def logout():
     return redirect(url_for("login"))
 
 # =========================
-# ADMIN PANEL
-# =========================
-@app.route("/admin")
-@login_required
-def admin():
-
-    users = load_users()
-
-    if users.get(current_user.id, {}).get("role") != "admin":
-        return "Access Denied", 403
-
-    return render_template("admin.html", users=users)
-
-# =========================
-# 🔍 SEARCH (🔥 FIXED)
+# 🔍 SEARCH (FIXED WITH VIN DETECTION)
 # =========================
 @app.route("/search", methods=["POST"])
 @login_required
@@ -173,36 +138,43 @@ def search():
             return jsonify({"error": "Empty query"})
 
         results = []
-
-        vin_code = query[3:7] if len(query) >= 7 else query
+        # VIN-ის 4 სიმბოლო (მე-4-დან მე-7-მდე)
+        extracted_vin = query[3:7] if len(query) >= 7 else query
 
         for bike in database:
-
             model = str(bike.get("model", "")).upper()
             type_code = str(bike.get("type_code", "")).upper()
-
-            vin_data = bike.get("vin", bike.get("vin_codes", []))
-
-            if isinstance(vin_data, str):
-                vin_list = [vin_data.upper()]
-            elif isinstance(vin_data, list):
-                vin_list = [str(v).upper() for v in vin_data]
+            
+            # VIN კოდების დამუშავება
+            v_val = bike.get("vin", bike.get("vin_codes", []))
+            if isinstance(v_val, str):
+                vin_list = [v_val.upper()]
+            elif isinstance(v_val, list):
+                vin_list = [str(v).upper() for v in v_val]
             else:
                 vin_list = []
 
             match = False
+            detected = "—"
 
-            if query in model:
+            # 1. ძებნა მოდელით ან ტიპის კოდით
+            if query in model or query == type_code:
                 match = True
-            elif query == type_code:
-                match = True
+                detected = vin_list[0] if vin_list else "—"
+            
+            # 2. ძებნა VIN-ით (სრული ან ამოჭრილი)
             elif query in vin_list:
                 match = True
-            elif vin_code in vin_list:
+                detected = query
+            elif extracted_vin in vin_list:
                 match = True
+                detected = extracted_vin
 
             if match:
-                results.append(bike)
+                # ვქმნით ასლს და ვამატებთdetected_vin ველს
+                bike_data = bike.copy()
+                bike_data["detected_vin"] = detected
+                results.append(bike_data)
 
         if not results:
             return jsonify({"error": "Model not found"})
@@ -214,46 +186,34 @@ def search():
         return jsonify({"error": "Server error"})
 
 # =========================
-# JWT
+# ADMIN PANEL & HOME
 # =========================
-@app.route("/api/login", methods=["POST"])
-@limiter.limit("10 per minute")
-def api_login():
-
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"error": "No data"}), 400
-
-    username = data.get("username")
-    password = data.get("password")
-
+@app.route("/admin")
+@login_required
+def admin():
     users = load_users()
+    if users.get(current_user.id, {}).get("role") != "admin":
+        return "Access Denied", 403
+    return render_template("admin.html", users=users)
 
-    if username in users:
-        if bcrypt.check_password_hash(users[username]["password"], password):
-            token = create_access_token(identity=username)
-            return jsonify(access_token=token)
-
-    return jsonify({"error": "Invalid credentials"}), 401
-
-@app.route("/api/protected", methods=["GET"])
-@jwt_required()
-def protected():
-    user = get_jwt_identity()
-    return jsonify(logged_in_as=user)
-
-# =========================
-# MAIN
-# =========================
 @app.route("/")
 @login_required
 def home():
     return render_template("index.html", user=current_user.id)
 
 # =========================
-# RUN
+# API / JWT
 # =========================
+@app.route("/api/login", methods=["POST"])
+def api_login():
+    data = request.get_json()
+    if not data: return jsonify({"error": "No data"}), 400
+    username, password = data.get("username"), data.get("password")
+    users = load_users()
+    if username in users and bcrypt.check_password_hash(users[username]["password"], password):
+        token = create_access_token(identity=username)
+        return jsonify(access_token=token)
+    return jsonify({"error": "Invalid credentials"}), 401
+
 if __name__ == "__main__":
-    print("🚀 SERVER STARTED")
     app.run(host="127.0.0.1", port=5000, debug=True)
