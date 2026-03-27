@@ -1,4 +1,4 @@
 Flask
 gunicorn
-pip install flask flask-login flask-bcrypt
-pip install flask-jwt-extended flask-limiter
+flask-login flask-bcrypt
+jwt-extended flask-limiter
