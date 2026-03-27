@@ -1,4 +1,0 @@
-Flask
-gunicorn
-flask-login flask-bcrypt
-jwt-extended flask-limiter
