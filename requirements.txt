@@ -1,2 +1,7 @@
 Flask
 gunicorn
+flask-login
+flask-bcrypt
+flask-jwt-extended
+flask-limiter
+pymupdf
