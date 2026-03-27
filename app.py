@@ -4,12 +4,13 @@ import json, os, sqlite3
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
 
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 
+# უსაფრთხოების გასაღებები
 app.config['SECRET_KEY'] = 'super_secret_key_123'
 app.config['JWT_SECRET_KEY'] = 'jwt_secret_key_456'
 
@@ -17,7 +18,7 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
 # =========================
-# 🔥 RATE LIMITER
+# 🔥 RATE LIMITER (უსაფრთხოებისთვის)
 # =========================
 limiter = Limiter(get_remote_address)
 limiter.init_app(app)
@@ -38,7 +39,7 @@ DB_PATH = os.path.join(BASE_DIR, "database.db")
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    # ვქმნით იუზერების ცხრილს
+    # იუზერების ცხრილის შექმნა (თუ არ არსებობს)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             username TEXT PRIMARY KEY,
@@ -52,7 +53,7 @@ def init_db():
 init_db()
 
 # =========================
-# MOTORCYCLE JSON LOAD (კითხვის რეჟიმი - უსაფრთხოა)
+# MOTORCYCLE JSON LOAD (მხოლოდ კითხვის რეჟიმი)
 # =========================
 MOTOR_DB_PATH = os.path.join(BASE_DIR, "specs_database", "motorcycle_specs_database.json")
 if not os.path.exists(MOTOR_DB_PATH):
@@ -100,7 +101,7 @@ def register():
         password = request.form.get("password")
 
         if not username or not password:
-            return render_template("register.html", error="Fill all fields")
+            return render_template("register.html", error="შეავსეთ ყველა ველი")
 
         hashed_pw = bcrypt.generate_password_hash(password).decode("utf-8")
 
@@ -113,7 +114,7 @@ def register():
             conn.close()
             return redirect(url_for("login"))
         except sqlite3.IntegrityError:
-            return render_template("register.html", error="User already exists")
+            return render_template("register.html", error="მომხმარებელი უკვე არსებობს")
 
     return render_template("register.html")
 
@@ -138,7 +139,7 @@ def login():
             login_user(User(row[0], row[2]), remember=remember)
             return redirect(url_for("home"))
 
-        return render_template("login.html", error="Invalid credentials")
+        return render_template("login.html", error="არასწორი მონაცემები")
 
     return render_template("login.html")
 
@@ -149,7 +150,7 @@ def logout():
     return redirect(url_for("login"))
 
 # =========================
-# 🔍 SEARCH (შენი მუშა ლოგიკა)
+# 🔍 SEARCH LOGIC
 # =========================
 @app.route("/search", methods=["POST"])
 @login_required
@@ -201,7 +202,7 @@ def search():
         return jsonify({"error": "Server error"})
 
 # =========================
-# ADMIN PANEL (SQLITE ვერსია)
+# ADMIN PANEL
 # =========================
 @app.route("/admin")
 @login_required
@@ -215,9 +216,7 @@ def admin():
     rows = cursor.fetchall()
     conn.close()
     
-    # ვაქცევთ ისეთ ფორმატში, როგორსაც admin.html ელოდება
     users_dict = {row[0]: {"role": row[1]} for row in rows}
-    
     return render_template("admin.html", users=users_dict)
 
 @app.route("/")
@@ -225,14 +224,8 @@ def admin():
 def home():
     return render_template("index.html", user=current_user.id)
 
-@app.route("/make-me-admin/<username>")
-def make_admin(username):
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        cursor.execute("UPDATE users SET role = 'admin' WHERE username = ?", (username,))
-        conn.commit()
-        conn.close()
-        return f"✅ User {username} is now an ADMIN!"
-    except Exception as e:
-        return f"❌ Error: {e}"
+# =========================
+# RUN APP
+# =========================
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
