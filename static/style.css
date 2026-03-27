@@ -1,95 +1,72 @@
 /* ========================= */
-/* RESET */
+/* RESET & GLOBAL */
 /* ========================= */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
 /* ========================= */
-/* HEADER */
+/* BODY & BACKGROUND */
 /* ========================= */
-
-.header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.logo {
-    width: 130px;
-    height: auto;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
-}
-
-/* ========================= */
-/* BODY */
-/* ========================= */
-
 body {
-    background:
-    linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.35)),
-    url("/static/m1000rr-bg.png");
-
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: white;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
+                url("/static/m1000rr-bg.png");
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
     background-attachment: fixed;
-
-    font-family: Segoe UI, Arial, sans-serif;
-    color: white;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
     min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
     overflow-x: hidden;
-
-    animation: fadeIn 1s ease-in-out;
+    animation: fadeIn 0.8s ease-in-out;
 }
 
 /* ========================= */
-/* BACKGROUND EFFECTS */
+/* TOP BAR */
 /* ========================= */
-
-.overlay {
+.top-bar {
     position: fixed;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center,
-        rgba(0,120,255,0.12),
-        transparent 70%);
-    z-index: 0;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 18px;
+    background: rgba(15,20,35,0.6);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+    z-index: 100;
 }
 
-body::before {
-    content: "";
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background:
-    radial-gradient(circle at center,
-    rgba(0,120,255,0.2),
-    transparent 60%);
-    pointer-events: none;
-    z-index: 0;
+.top-bar .left, .top-bar .right { display: flex; align-items: center; gap: 12px; }
+.mini-logo { width: 35px; cursor: pointer; }
+.app-name { font-size: 14px; color: #ccc; }
+.user { font-size: 13px; color: #aaa; }
+
+.logout-btn, .admin-btn {
+    background: rgba(255,255,255,0.08);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: 0.25s;
 }
+.logout-btn:hover { background: rgba(255,60,60,0.5); }
+.admin-btn:hover { background: rgba(46,140,255,0.6); }
 
 /* ========================= */
-/* MAIN CARD */
+/* MAIN CONTAINER (აღარ იწელება) */
 /* ========================= */
-
 .container {
     width: 600px;
     background: rgba(20,25,40,0.75);
@@ -97,292 +74,126 @@ body::before {
     padding: 45px;
     border-radius: 16px;
     box-shadow: 0 30px 90px rgba(0,0,0,0.95);
-    text-align: center;
     border: 1px solid rgba(255,255,255,0.06);
     position: relative;
     z-index: 2;
     margin: 60px 0;
-}
-
-/* ========================= */
-/* TITLE */
-/* ========================= */
-
-.title {
-    font-size: 30px;
-    font-weight: 600;
-    margin-bottom: 25px;
-    letter-spacing: 1.5px;
-    text-shadow: 0 0 12px rgba(46,140,255,0.25);
-}
-
-/* ========================= */
-/* SEARCH */
-/* ========================= */
-
-.search-box {
-    display: flex;
-    margin-bottom: 15px;
-}
-
-.search-box input {
-    flex: 1;
-    padding: 14px;
-    border: none;
-    border-radius: 8px 0 0 8px;
-    background: #222733;
-    color: white;
-    font-size: 16px;
-    outline: none;
-    transition: 0.3s;
-}
-
-.search-box input:focus {
-    box-shadow: 0 0 14px rgba(46,140,255,0.8);
-    background: #262c3b;
-}
-
-.search-btn {
-    width: 55px;
-    border-radius: 0 8px 8px 0;
-    background: linear-gradient(135deg, #2e8cff, #1c69d4);
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 0 12px rgba(46,140,255,0.3);
-}
-
-.search-btn:hover {
-    box-shadow: 0 0 22px rgba(46,140,255,0.8);
-    transform: translateY(-1px);
-}
-
-/* ========================= */
-/* MAIN BUTTON */
-/* ========================= */
-
-.main-search {
-    margin-top: 5px;
-    background: linear-gradient(135deg, #2e8cff, #1f6fe0);
-    border: none;
-    padding: 12px 30px;
-    color: white;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 0 12px rgba(46,140,255,0.3);
-}
-
-.main-search:hover {
-    box-shadow: 0 0 25px rgba(46,140,255,0.7);
-    transform: translateY(-1px);
-}
-
-/* ========================= */
-/* ACTION BUTTONS */
-/* ========================= */
-
-.actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.btn {
-    padding: 10px 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-}
-
-.btn.secondary {
-    background: rgba(255,255,255,0.08);
-    color: white;
-    backdrop-filter: blur(6px);
-    transition: 0.3s;
-}
-
-.btn.secondary:hover {
-    background: rgba(255,255,255,0.18);
-}
-
-/* ========================= */
-/* CARDS */
-/* ========================= */
-
-.cards {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 25px;
-}
-
-.card {
-    width: 130px;
-    height: 90px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.card:hover {
-    background: rgba(255,255,255,0.1);
-    transform: translateY(-3px);
-}
-
-/* ========================= */
-/* VIN HINT */
-/* ========================= */
-
-.vin-hint {
-    font-size: 13px;
-    color: #9fc3ff;
-    margin-top: 10px;
     text-align: center;
-    cursor: pointer;
 }
 
-.vin-hint:hover {
-    color: white;
-}
+.hero .logo { width: 130px; margin-bottom: 15px; transition: 0.3s; cursor: pointer; }
+.hero h1 { font-size: 30px; font-weight: 600; margin-bottom: 8px; text-shadow: 0 0 12px rgba(46,140,255,0.25); }
+.subtitle { font-size: 13px; color: #aaa; margin-bottom: 25px; }
 
 /* ========================= */
-/* RESULT */
+/* SEARCH & VIN HINT (გასწორებული) */
 /* ========================= */
-
-.result {
-    margin-top: 35px;
-    text-align: left;
+.search-box { display: flex; margin-bottom: 10px; }
+.search-box input {
+    flex: 1; padding: 14px; border-radius: 8px 0 0 8px; border: none;
+    background: #1c2333; color: white; font-size: 16px; outline: none;
 }
-
-.result h3 {
-    margin-bottom: 10px;
-    font-size: 20px;
+.search-btn { 
+    width: 55px; border-radius: 0 8px 8px 0; border: none; 
+    background: linear-gradient(135deg, #2e8cff, #1c69d4); 
+    cursor: pointer; transition: 0.3s;
 }
+.search-btn:hover { box-shadow: 0 0 15px rgba(46,140,255,0.5); }
 
-/* SPEC */
+.vin-hint { 
+    font-size: 13px; 
+    color: #9fc3ff; 
+    margin-top: 10px; 
+    text-align: center; 
+    cursor: pointer; /* მაუსის კურსორი შეიცვლება */
+    transition: 0.2s;
+    display: block;
+}
+.vin-hint:hover { color: white; text-shadow: 0 0 8px rgba(255,255,255,0.5); }
 
-.spec {
-    display: flex;
-    justify-content: space-between;
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+.main-search { 
+    width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px; border: none; 
+    background: linear-gradient(135deg, #2e8cff, #1c69d4); color: white; 
+    font-weight: 600; cursor: pointer; transition: 0.3s; 
+}
+.main-search:hover { box-shadow: 0 0 25px rgba(46,140,255,0.7); transform: translateY(-1px); }
+
+/* ========================= */
+/* 3 ACTION BUTTONS (Advanced, Recent, About) */
+/* ========================= */
+.actions { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+.btn.secondary { 
+    background: rgba(255,255,255,0.08); 
+    padding: 10px 16px; 
+    border-radius: 8px; 
+    color: white; 
+    border: none; 
+    cursor: pointer; /* კურსორი გასწორდა */
+    transition: 0.3s;
     font-size: 14px;
 }
-
-.spec span:first-child {
-    color: #8aa4c8;
-}
-
-.spec span:last-child {
-    font-weight: 500;
-}
-
-.result hr {
-    margin: 15px 0;
-    border: none;
-    height: 1px;
-    background: rgba(255,255,255,0.08);
+.btn.secondary:hover { 
+    background: rgba(255,255,255,0.15); 
+    transform: translateY(-2px);
 }
 
 /* ========================= */
-/* MODAL */
+/* CARDS (ქვედა 3 ღილაკი) */
 /* ========================= */
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 999;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.75);
+.cards { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
+.card { 
+    width: 130px; height: 90px; background: rgba(255,255,255,0.05); 
+    border-radius: 12px; display: flex; align-items: center; 
+    justify-content: center; cursor: pointer; transition: 0.25s; 
 }
-
-.modal-content {
-    background: #111;
-    margin: 10% auto;
-    padding: 25px;
-    width: 400px;
-    border-radius: 12px;
-    text-align: center;
-    animation: fadeIn 0.3s ease;
-}
-
-.close {
-    float: right;
-    cursor: pointer;
-    font-size: 20px;
-}
-
-.vin-example {
-    margin: 15px 0;
-    font-family: monospace;
-    background: #000;
-    padding: 10px;
-    border-radius: 6px;
-}
-
-.highlight {
-    color: #2e8cff;
-    font-weight: bold;
+.card:hover { 
+    background: rgba(46,140,255,0.1); 
+    transform: translateY(-3px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
 /* ========================= */
-/* FOOTER */
+/* RESULT CONTROL */
 /* ========================= */
+.result:empty { display: none; }
+.result:not(:empty) { margin-top: 35px; text-align: left; }
+.result-card { background: rgba(255,255,255,0.04); border-radius: 14px; padding: 20px; border-top: 2px solid rgba(46,140,255,0.35); }
+.spec { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
 
-.creator {
-    position: fixed;
-    bottom: 10px;
-    left: 15px;
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
+/* ========================= */
+/* AUTH PAGES (LOGIN / REGISTER) */
+/* ========================= */
+.auth-container { width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+.auth-card {
+    width: 380px; background: rgba(20,25,40,0.8); backdrop-filter: blur(20px);
+    border-radius: 18px; padding: 40px; box-shadow: 0 25px 70px rgba(0,0,0,0.8);
+    border: 1px solid rgba(255,255,255,0.06); text-align: center;
+}
+.auth-card input {
+    width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.05); background: #161b29; color: white; outline: none;
+}
+.auth-card button {
+    width: 100%; padding: 14px; border: none; border-radius: 10px;
+    background: linear-gradient(135deg, #2e8cff, #1c69d4); color: white; font-weight: 600; cursor: pointer;
 }
 
-.creator strong {
-    color: #2e8cff;
-    margin-left: 5px;
-}
-
 /* ========================= */
-/* ANIMATION */
+/* MODAL & CREATOR */
 /* ========================= */
+.modal { display: none; position: fixed; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; justify-content: center; align-items: center; }
+.modal-content { background: #111; padding: 25px; width: 400px; border-radius: 12px; text-align: center; }
+.close { float: right; cursor: pointer; font-size: 20px; }
+.creator { position: fixed; bottom: 10px; left: 15px; font-size: 12px; color: rgba(255,255,255,0.4); }
+.creator strong { color: #2e8cff; }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* ========================= */
-/* MOBILE */
-/* ========================= */
-
 @media(max-width:700px){
-    .container{
-        width: 90%;
-        padding: 30px;
-    }
-
-    .actions{
-        flex-direction: column;
-    }
-
-    .cards{
-        flex-direction: column;
-    }
+    .container, .auth-card { width: 92%; padding: 25px; }
+    .actions, .cards { flex-direction: column; }
+    .card { width: 100%; }
 }

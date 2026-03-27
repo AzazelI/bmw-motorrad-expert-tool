@@ -4,59 +4,79 @@
 <head>
     <meta charset="UTF-8">
     <title>BMW Motorrad Expert Tool</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
+<!-- 🔐 TOP BAR -->
+<div class="top-bar">
+    <div class="left">
+        <img src="{{ url_for('static', filename='GT.png') }}" class="mini-logo" onclick="goHome()">
+        <span class="app-name">BMW Motorrad Tool</span>
+    </div>
+
+    <div class="right">
+        <span class="user">👤 {{ user }}</span>
+
+        {% if user == "admin" %}
+            <a href="/admin" class="admin-btn">Admin</a>
+        {% endif %}
+
+        <button class="logout-btn" onclick="window.location.href='/logout'">Logout</button>
+    </div>
+</div>
+
+<!-- BACKGROUND OVERLAY -->
 <div class="overlay"></div>
 
 <div class="container">
 
-    <!-- 🔥 LOGO (HOME BUTTON) -->
-    <div class="header">
+    <!-- 🔥 HERO SECTION -->
+    <div class="hero">
+        <!-- ✅ FIX: clickable logo -->
         <img src="{{ url_for('static', filename='GT.png') }}" class="logo" onclick="goHome()">
+
+        <h1>BMW Motorrad Expert Tool</h1>
+        <p class="subtitle">Search models, VIN codes & technical data instantly</p>
     </div>
 
-    <!-- TITLE -->
-    <div class="title">
-        BMW Motorrad Expert Tool
+    <!-- 🔍 SEARCH CARD -->
+    <div class="search-card">
+
+        <div class="search-box">
+            <input id="search" placeholder="Enter Model, Type Code (K66) or VIN (4–7)">
+            <button class="search-btn" onclick="search()">🔍</button>
+        </div>
+
+        <button class="main-search" onclick="search()">Search</button>
+
+        <p class="vin-hint" onclick="openHelp()">
+            ℹ️ VIN Help (characters 4–7)
+        </p>
+
     </div>
 
-    <!-- SEARCH -->
-    <div class="search-box">
-        <input id="search" placeholder="Enter model, or model code (Exm.K66) or VIN code">
-        <button class="search-btn" onclick="search()">🔍</button>
-    </div>
-
-    <!-- VIN HINT CLICKABLE -->
-    <p class="vin-hint" onclick="openHelp()">
-        ℹ️ How to find VIN code (characters 4–7)
-    </p>
-
-    <!-- MAIN SEARCH -->
-    <button class="main-search" onclick="search()">Search</button>
-
-    <!-- ACTION BUTTONS -->
+    <!-- ⚙ ACTIONS -->
     <div class="actions">
         <button class="btn secondary" onclick="toggleAdvanced()">🔎 Advanced</button>
         <button class="btn secondary" onclick="showRecent()">🕘 Recent</button>
         <button class="btn secondary" onclick="window.location.href='/about'">ℹ About</button>
     </div>
 
-    <!-- CARDS -->
+    <!-- 📊 QUICK ACCESS CARDS -->
     <div class="cards">
-        <div class="card">🏁 Docs</div>
-        <div class="card">🎧 Support</div>
-        <div class="card">ℹ️ About</div>
+        <div class="card">🏁 Technical Docs</div>
+        <div class="card">🧰 Parts Info</div>
+        <div class="card">📞 Support</div>
     </div>
 
-    <!-- RESULT -->
+    <!-- 📦 RESULT -->
     <div id="result" class="result"></div>
 
 </div>
 
-<!-- VIN HELP MODAL -->
+<!-- 🪟 VIN HELP MODAL -->
 <div id="vinHelp" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeHelp()">&times;</span>
@@ -73,21 +93,26 @@
     </div>
 </div>
 
-<!-- FOOTER -->
+<!-- 👣 FOOTER -->
 <footer class="creator">
-    <span>Created By</span>
+    <span>Created by</span>
     <strong>G. Jananashvili</strong>
 </footer>
 
-<script src="/static/script.js"></script>
+<!-- SCRIPTS -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 <script>
 function openHelp() {
-    document.getElementById("vinHelp").style.display = "block";
+    document.getElementById("vinHelp").style.display = "flex";
 }
 
 function closeHelp() {
     document.getElementById("vinHelp").style.display = "none";
+}
+
+function goHome() {
+    window.location.href = "/";
 }
 </script>
 
