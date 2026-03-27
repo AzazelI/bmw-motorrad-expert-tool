@@ -13,6 +13,11 @@
 
 <div class="container">
 
+    <!-- 🔥 LOGO (HOME BUTTON) -->
+    <div class="header">
+        <img src="{{ url_for('static', filename='GT.png') }}" class="logo" onclick="goHome()">
+    </div>
+
     <!-- TITLE -->
     <div class="title">
         BMW Motorrad Expert Tool
@@ -61,7 +66,7 @@
         <p>Use characters <b>4–7</b> from your VIN</p>
 
         <div class="vin-example">
-            *WB1 <span class="highlight">0380</span> 038ZU48517*
+            WB1 <span class="highlight">0380</span> 038ZU48517
         </div>
 
         <p class="hint">Example: <b>0380</b></p>
