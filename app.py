@@ -144,7 +144,7 @@ def logout():
     return redirect(url_for("login"))
 
 # =========================
-# 🔍 SEARCH LOGIC
+# 🔍 SEARCH LOGIC (UPDATED)
 # =========================
 @app.route("/search", methods=["POST"])
 @login_required
@@ -162,14 +162,21 @@ def search():
         for bike in motor_database:
             model = str(bike.get("model", "")).upper()
             type_code = str(bike.get("type_code", "")).upper()
-            vin_data = bike.get("vin", bike.get("vin_codes", []))
             
-            if isinstance(vin_data, str): vin_list = [vin_data.upper()]
-            elif isinstance(vin_data, list): vin_list = [str(v).upper() for v in vin_data]
-            else: vin_list = []
+            # ჩასწორებული: ვამოწმებთ "vins", "vin" და "vin_codes" ველებს
+            vin_data = bike.get("vins", bike.get("vin", bike.get("vin_codes", [])))
+            
+            if isinstance(vin_data, str): 
+                vin_list = [vin_data.upper()]
+            elif isinstance(vin_data, list): 
+                vin_list = [str(v).upper() for v in vin_data]
+            else: 
+                vin_list = []
 
             match = False
             detected = "—"
+            
+            # ძებნა მოდელში, კოდში ან VIN-ების სიაში
             if query in model or query == type_code:
                 match = True
                 detected = vin_list[0] if vin_list else "—"
@@ -179,11 +186,14 @@ def search():
 
             if match:
                 bike_copy = bike.copy()
+                # ვინახავთ ნაპოვნ VIN-ს, რომ წინა მხარემ (frontend) მარტივად გამოიყენოს
                 bike_copy["detected_vin"] = detected
                 results.append(bike_copy)
 
-        if not results: return jsonify({"error": "Model not found"})
+        if not results: 
+            return jsonify({"error": "Model not found"})
         return jsonify(results)
+        
     except Exception as e:
         print("❌ SEARCH ERROR:", e)
         return jsonify({"error": "Server error"})
@@ -216,7 +226,6 @@ def clear_logs():
     if current_user.role != "admin":
         return jsonify({"error": "Unauthorized"}), 403
     try:
-        # Supabase: წაშალე ყველა ჩანაწერი სადაც ID არ არის 0 (ანუ ყველა)
         supabase.table("search_logs").delete().neq("id", 0).execute()
         return jsonify({"status": "success"})
     except Exception as e:
