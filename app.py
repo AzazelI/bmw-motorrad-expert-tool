@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-import json, os, sqlite3
+import json, os
+from supabase import create_client, Client
 
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
@@ -18,7 +19,16 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
 # =========================
-# 🔥 RATE LIMITER (უსაფრთხოებისთვის)
+# ☁️ SUPABASE SETUP
+# =========================
+SUPABASE_URL = "https://xxtwhxvafgkdrtuqqetu.supabase.co"
+# ვიყენებთ anon public key-ს კავშირისთვის
+SUPABASE_KEY = "sb_publishable_js3pEbUOHt__E9EBIoSYfQ_5qVCBImI" 
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+# =========================
+# 🔥 RATE LIMITER
 # =========================
 limiter = Limiter(get_remote_address)
 limiter.init_app(app)
@@ -31,30 +41,9 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 # =========================
-# 🗄️ SQLITE DATABASE SETUP
+# MOTORCYCLE JSON LOAD
 # =========================
 BASE_DIR = os.path.dirname(__file__)
-DB_PATH = os.path.join(BASE_DIR, "database.db")
-
-def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    # იუზერების ცხრილის შექმნა (თუ არ არსებობს)
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            username TEXT PRIMARY KEY,
-            password TEXT NOT NULL,
-            role TEXT NOT NULL
-        )
-    ''')
-    conn.commit()
-    conn.close()
-
-init_db()
-
-# =========================
-# MOTORCYCLE JSON LOAD (მხოლოდ კითხვის რეჟიმი)
-# =========================
 MOTOR_DB_PATH = os.path.join(BASE_DIR, "specs_database", "motorcycle_specs_database.json")
 if not os.path.exists(MOTOR_DB_PATH):
     MOTOR_DB_PATH = os.path.join(BASE_DIR, "motorcycle_specs_database.json")
@@ -77,14 +66,13 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("SELECT username, role FROM users WHERE username = ?", (user_id,))
-    user_data = cursor.fetchone()
-    conn.close()
-    
-    if user_data:
-        return User(user_data[0], user_data[1])
+    try:
+        response = supabase.table("users").select("username, role").eq("username", user_id).execute()
+        user_data = response.data
+        if user_data:
+            return User(user_data[0]["username"], user_data[0]["role"])
+    except Exception as e:
+        print(f"❌ Supabase Load User Error: {e}")
     return None
 
 # =========================
@@ -106,15 +94,22 @@ def register():
         hashed_pw = bcrypt.generate_password_hash(password).decode("utf-8")
 
         try:
-            conn = sqlite3.connect(DB_PATH)
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", 
-                           (username, hashed_pw, "user"))
-            conn.commit()
-            conn.close()
+            # ვამოწმებთ არსებობს თუ არა იუზერი
+            check_user = supabase.table("users").select("username").eq("username", username).execute()
+            if check_user.data:
+                return render_template("register.html", error="მომხმარებელი უკვე არსებობს")
+
+            # ახალი იუზერის ჩაწერა
+            supabase.table("users").insert({
+                "username": username, 
+                "password": hashed_pw, 
+                "role": "user"
+            }).execute()
+            
             return redirect(url_for("login"))
-        except sqlite3.IntegrityError:
-            return render_template("register.html", error="მომხმარებელი უკვე არსებობს")
+        except Exception as e:
+            print(f"❌ Register Error: {e}")
+            return render_template("register.html", error="სერვერის შეცდომა")
 
     return render_template("register.html")
 
@@ -129,15 +124,16 @@ def login():
         password = request.form.get("password")
         remember = True if request.form.get("remember") else False
 
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        cursor.execute("SELECT username, password, role FROM users WHERE username = ?", (username,))
-        row = cursor.fetchone()
-        conn.close()
+        try:
+            response = supabase.table("users").select("*").eq("username", username).execute()
+            user_data = response.data
 
-        if row and bcrypt.check_password_hash(row[1], password):
-            login_user(User(row[0], row[2]), remember=remember)
-            return redirect(url_for("home"))
+            if user_data and bcrypt.check_password_hash(user_data[0]["password"], password):
+                user_obj = User(user_data[0]["username"], user_data[0]["role"])
+                login_user(user_obj, remember=remember)
+                return redirect(url_for("home"))
+        except Exception as e:
+            print(f"❌ Login Error: {e}")
 
         return render_template("login.html", error="არასწორი მონაცემები")
 
@@ -210,14 +206,14 @@ def admin():
     if current_user.role != "admin":
         return "Access Denied", 403
 
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("SELECT username, role FROM users")
-    rows = cursor.fetchall()
-    conn.close()
-    
-    users_dict = {row[0]: {"role": row[1]} for row in rows}
-    return render_template("admin.html", users=users_dict)
+    try:
+        response = supabase.table("users").select("username, role").execute()
+        users_list = response.data
+        users_dict = {u["username"]: {"role": u["role"]} for u in users_list}
+        return render_template("admin.html", users=users_dict)
+    except Exception as e:
+        print(f"❌ Admin Page Error: {e}")
+        return "Database Error", 500
 
 @app.route("/")
 @login_required
