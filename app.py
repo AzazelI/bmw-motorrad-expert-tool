@@ -86,7 +86,7 @@ def log_search(username, query):
             "query": query
         }).execute()
     except Exception as e:
-        print(f"⚠️ Logging Error (Make sure search_logs table exists): {e}")
+        print(f"⚠️ Logging Error: {e}")
 
 # =========================
 # ROUTES (REGISTER & LOGIN)
@@ -96,32 +96,25 @@ def log_search(username, query):
 def register():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-
         if not username or not password:
             return render_template("register.html", error="შეავსეთ ყველა ველი")
-
         hashed_pw = bcrypt.generate_password_hash(password).decode("utf-8")
-
         try:
             check_user = supabase.table("users").select("username").eq("username", username).execute()
             if check_user.data:
                 return render_template("register.html", error="მომხმარებელი უკვე არსებობს")
-
             supabase.table("users").insert({
                 "username": username, 
                 "password": hashed_pw, 
                 "role": "user"
             }).execute()
-            
             return redirect(url_for("login"))
         except Exception as e:
             print(f"❌ Register Error: {e}")
             return render_template("register.html", error="სერვერის შეცდომა")
-
     return render_template("register.html")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -129,26 +122,20 @@ def register():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
         remember = True if request.form.get("remember") else False
-
         try:
             response = supabase.table("users").select("*").eq("username", username).execute()
             user_data = response.data
-
             if user_data and bcrypt.check_password_hash(user_data[0]["password"], password):
                 user_obj = User(user_data[0]["username"], user_data[0]["role"])
                 login_user(user_obj, remember=remember)
                 return redirect(url_for("home"))
         except Exception as e:
             print(f"❌ Login Error: {e}")
-
     return render_template("login.html", error="არასწორი მონაცემები")
-
-    return render_template("login.html")
 
 @app.route("/logout")
 @login_required
@@ -165,31 +152,24 @@ def search():
     try:
         data = request.get_json()
         query = str(data.get("query", "")).strip().upper()
-
         if not query:
             return jsonify({"error": "Empty query"})
-
-        # ჩაწეროს ლოგებში ვინ რა დასერჩა
+        
         log_search(current_user.id, query)
-
         results = []
         vin_code = query[3:7] if len(query) >= 7 else query
 
         for bike in motor_database:
             model = str(bike.get("model", "")).upper()
             type_code = str(bike.get("type_code", "")).upper()
-            
             vin_data = bike.get("vin", bike.get("vin_codes", []))
-            if isinstance(vin_data, str):
-                vin_list = [vin_data.upper()]
-            elif isinstance(vin_data, list):
-                vin_list = [str(v).upper() for v in vin_data]
-            else:
-                vin_list = []
+            
+            if isinstance(vin_data, str): vin_list = [vin_data.upper()]
+            elif isinstance(vin_data, list): vin_list = [str(v).upper() for v in vin_data]
+            else: vin_list = []
 
             match = False
             detected = "—"
-
             if query in model or query == type_code:
                 match = True
                 detected = vin_list[0] if vin_list else "—"
@@ -202,11 +182,8 @@ def search():
                 bike_copy["detected_vin"] = detected
                 results.append(bike_copy)
 
-        if not results:
-            return jsonify({"error": "Model not found"})
-
+        if not results: return jsonify({"error": "Model not found"})
         return jsonify(results)
-
     except Exception as e:
         print("❌ SEARCH ERROR:", e)
         return jsonify({"error": "Server error"})
@@ -219,76 +196,58 @@ def search():
 def admin():
     if current_user.role != "admin":
         return "Access Denied", 403
-
     try:
-        # იუზერების სია
         response = supabase.table("users").select("username, role").execute()
         users_list = response.data
         users_dict = {u["username"]: {"role": u["role"]} for u in users_list}
-        
-        # ბოლო 20 ძებნის ლოგი (თუ ცხრილი გაქვს)
         logs = []
         try:
             log_res = supabase.table("search_logs").select("*").order("created_at", desc=True).limit(20).execute()
             logs = log_res.data
-        except:
-            pass
-
+        except: pass
         return render_template("admin.html", users=users_dict, logs=logs)
     except Exception as e:
         print(f"❌ Admin Page Error: {e}")
         return "Database Error", 500
 
+@app.route("/clear-logs", methods=["POST"])
+@login_required
+def clear_logs():
+    if current_user.role != "admin":
+        return jsonify({"error": "Unauthorized"}), 403
+    try:
+        # Supabase: წაშალე ყველა ჩანაწერი სადაც ID არ არის 0 (ანუ ყველა)
+        supabase.table("search_logs").delete().neq("id", 0).execute()
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 @app.route("/add-user", methods=["POST"])
 @login_required
 def add_user():
-    if current_user.role != "admin":
-        return jsonify({"error": "Unauthorized"}), 403
-    
-    username = request.form.get("username")
-    password = request.form.get("password")
-    role = request.form.get("role", "user")
-
-    if not username or not password:
-        return redirect(url_for("admin"))
-
+    if current_user.role != "admin": return jsonify({"error": "Unauthorized"}), 403
+    username = request.form.get("username"); password = request.form.get("password"); role = request.form.get("role", "user")
+    if not username or not password: return redirect(url_for("admin"))
     hashed_pw = bcrypt.generate_password_hash(password).decode("utf-8")
-
     try:
-        supabase.table("users").insert({
-            "username": username,
-            "password": hashed_pw,
-            "role": role
-        }).execute()
+        supabase.table("users").insert({"username": username, "password": hashed_pw, "role": role}).execute()
         return redirect(url_for("admin"))
     except Exception as e:
-        print(f"❌ Add User Error: {e}")
         return "Error adding user", 500
 
 @app.route("/delete-user/<username>", methods=["POST"])
 @login_required
 def delete_user(username):
-    if current_user.role != "admin":
-        return jsonify({"error": "Unauthorized"}), 403
-    
-    if username == current_user.id:
-        return redirect(url_for("admin"))
-
+    if current_user.role != "admin" or username == current_user.id: return redirect(url_for("admin"))
     try:
         supabase.table("users").delete().eq("username", username).execute()
         return redirect(url_for("admin"))
-    except Exception as e:
-        print(f"❌ Delete Error: {e}")
-        return "Error deleting user", 500
+    except: return "Error deleting user", 500
 
 @app.route("/")
 @login_required
 def home():
-    # გადაეცემა role-იც, რომ index.html-მა იცოდეს admin ღილაკის გამოჩენა
     return render_template("index.html", user=current_user.id, role=current_user.role)
 
-# =========================
-# RUN APP
-# =========================
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
