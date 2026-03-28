@@ -22,7 +22,6 @@ jwt = JWTManager(app)
 # ☁️ SUPABASE SETUP
 # =========================
 SUPABASE_URL = "https://xxtwhxvafgkdrtuqqetu.supabase.co"
-# ვიყენებთ anon public key-ს კავშირისთვის
 SUPABASE_KEY = "sb_publishable_js3pEbUOHt__E9EBIoSYfQ_5qVCBImI" 
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -94,12 +93,10 @@ def register():
         hashed_pw = bcrypt.generate_password_hash(password).decode("utf-8")
 
         try:
-            # ვამოწმებთ არსებობს თუ არა იუზერი
             check_user = supabase.table("users").select("username").eq("username", username).execute()
             if check_user.data:
                 return render_template("register.html", error="მომხმარებელი უკვე არსებობს")
 
-            # ახალი იუზერის ჩაწერა
             supabase.table("users").insert({
                 "username": username, 
                 "password": hashed_pw, 
@@ -198,7 +195,7 @@ def search():
         return jsonify({"error": "Server error"})
 
 # =========================
-# ADMIN PANEL
+# ADMIN PANEL FUNCTIONS
 # =========================
 @app.route("/admin")
 @login_required
@@ -214,6 +211,23 @@ def admin():
     except Exception as e:
         print(f"❌ Admin Page Error: {e}")
         return "Database Error", 500
+
+@app.route("/delete-user/<username>", methods=["POST"])
+@login_required
+def delete_user(username):
+    if current_user.role != "admin":
+        return jsonify({"error": "Unauthorized"}), 403
+    
+    # თავის თავს რომ არ წაუშალოს ადმინმა
+    if username == current_user.id:
+        return redirect(url_for("admin"))
+
+    try:
+        supabase.table("users").delete().eq("username", username).execute()
+        return redirect(url_for("admin"))
+    except Exception as e:
+        print(f"❌ Delete Error: {e}")
+        return "Error deleting user", 500
 
 @app.route("/")
 @login_required
