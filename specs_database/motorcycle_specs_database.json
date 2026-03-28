@@ -226,7 +226,7 @@
         "kerb_weight_kg": "199",
         "gross_weight_kg": "407",
         "payload_kg": "85",
-        "engine_type": "2-cylinder",
+        "engine_type": "4-cylinder",
         "fuel": "Petrol",
         "vin": "0P41"
     },
@@ -486,7 +486,7 @@
         "kerb_weight_kg": "197",
         "gross_weight_kg": "407",
         "payload_kg": "85",
-        "engine_type": null,
+        "engine_type": 4-cylinder,
         "fuel": "Petrol",
         "vin": "0E63"
     },
