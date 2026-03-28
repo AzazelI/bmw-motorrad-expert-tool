@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 import json, os
 from supabase import create_client, Client
+from datetime import datetime
 
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
@@ -75,6 +76,19 @@ def load_user(user_id):
     return None
 
 # =========================
+# 📊 LOGGING LOGIC
+# =========================
+def log_search(username, query):
+    """ ინახავს ძებნის ისტორიას Supabase-ში """
+    try:
+        supabase.table("search_logs").insert({
+            "username": username,
+            "query": query
+        }).execute()
+    except Exception as e:
+        print(f"⚠️ Logging Error (Make sure search_logs table exists): {e}")
+
+# =========================
 # ROUTES (REGISTER & LOGIN)
 # =========================
 @app.route("/register", methods=["GET", "POST"])
@@ -132,7 +146,7 @@ def login():
         except Exception as e:
             print(f"❌ Login Error: {e}")
 
-        return render_template("login.html", error="არასწორი მონაცემები")
+    return render_template("login.html", error="არასწორი მონაცემები")
 
     return render_template("login.html")
 
@@ -154,6 +168,9 @@ def search():
 
         if not query:
             return jsonify({"error": "Empty query"})
+
+        # ჩაწეროს ლოგებში ვინ რა დასერჩა
+        log_search(current_user.id, query)
 
         results = []
         vin_code = query[3:7] if len(query) >= 7 else query
@@ -204,13 +221,49 @@ def admin():
         return "Access Denied", 403
 
     try:
+        # იუზერების სია
         response = supabase.table("users").select("username, role").execute()
         users_list = response.data
         users_dict = {u["username"]: {"role": u["role"]} for u in users_list}
-        return render_template("admin.html", users=users_dict)
+        
+        # ბოლო 20 ძებნის ლოგი (თუ ცხრილი გაქვს)
+        logs = []
+        try:
+            log_res = supabase.table("search_logs").select("*").order("created_at", desc=True).limit(20).execute()
+            logs = log_res.data
+        except:
+            pass
+
+        return render_template("admin.html", users=users_dict, logs=logs)
     except Exception as e:
         print(f"❌ Admin Page Error: {e}")
         return "Database Error", 500
+
+@app.route("/add-user", methods=["POST"])
+@login_required
+def add_user():
+    if current_user.role != "admin":
+        return jsonify({"error": "Unauthorized"}), 403
+    
+    username = request.form.get("username")
+    password = request.form.get("password")
+    role = request.form.get("role", "user")
+
+    if not username or not password:
+        return redirect(url_for("admin"))
+
+    hashed_pw = bcrypt.generate_password_hash(password).decode("utf-8")
+
+    try:
+        supabase.table("users").insert({
+            "username": username,
+            "password": hashed_pw,
+            "role": role
+        }).execute()
+        return redirect(url_for("admin"))
+    except Exception as e:
+        print(f"❌ Add User Error: {e}")
+        return "Error adding user", 500
 
 @app.route("/delete-user/<username>", methods=["POST"])
 @login_required
@@ -218,7 +271,6 @@ def delete_user(username):
     if current_user.role != "admin":
         return jsonify({"error": "Unauthorized"}), 403
     
-    # თავის თავს რომ არ წაუშალოს ადმინმა
     if username == current_user.id:
         return redirect(url_for("admin"))
 
@@ -232,7 +284,8 @@ def delete_user(username):
 @app.route("/")
 @login_required
 def home():
-    return render_template("index.html", user=current_user.id)
+    # გადაეცემა role-იც, რომ index.html-მა იცოდეს admin ღილაკის გამოჩენა
+    return render_template("index.html", user=current_user.id, role=current_user.role)
 
 # =========================
 # RUN APP
