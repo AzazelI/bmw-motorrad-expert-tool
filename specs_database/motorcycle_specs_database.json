@@ -171,23 +171,54 @@
         "engine_type": null,
         "fuel": "Petrol"
     },
-    {
-        "model": "R18",
-        "type_code": "K34",
-        "source_file": "R18_K34_0N93.pdf",
-        "engine_cc": "1802",
-        "power_kw": "67",
-        "horsepower": 90,
-        "kerb_weight_kg": "374",
-        "gross_weight_kg": "560",
-        "payload_kg": "10",
-        "engine_type": "2-cylinder",
-        "fuel": "Petrol",
-        "vin": [
-            "0N61",
-            "0N71"
-        ]
-    },
+{
+    "model": "R18",
+    "type_code": "K34",
+    "source_file": "R18_K34_0N93.pdf",
+    "engine_cc": "1802",
+    "power_kw": "67",
+    "horsepower": 91,
+    "kerb_weight_kg": "345",
+    "gross_weight_kg": "560",
+    "payload_kg": "215",
+    "engine_type": "2-cylinder boxer",
+    "fuel": "Petrol",
+    "vin": "0N71"
+},
+
+
+
+{
+    "model": "R18 Classic",
+    "type_code": "K34",
+    "source_file": "R18_CLASSIC_K34.pdf",
+    "engine_cc": "1802",
+    "power_kw": "67",
+    "horsepower": 91,
+    "kerb_weight_kg": "365",
+    "gross_weight_kg": "560",
+    "payload_kg": "195",
+    "engine_type": "2-cylinder boxer",
+    "fuel": "Petrol",
+    "vin": "0N71"
+},
+
+
+{
+    "model": "R18 Roctane",
+    "type_code": "K34",
+    "source_file": "R18_ROCTANE_K34.pdf",
+    "engine_cc": "1802",
+    "power_kw": "67",
+    "horsepower": 91,
+    "kerb_weight_kg": "374",
+    "gross_weight_kg": "560",
+    "payload_kg": "186",
+    "engine_type": "2-cylinder boxer",
+    "fuel": "Petrol",
+        "vin": "0N61"	
+},
+
     {
         "model": "K1600GTL",
         "type_code": "K48",
@@ -488,7 +519,7 @@
         "payload_kg": "85",
         "engine_type": "4-cylinder",
         "fuel": "Petrol",
-        "vin": "0E63"
+        "vin":["0E63","0E23"]
     },
     {
         "model": "S1000R",
