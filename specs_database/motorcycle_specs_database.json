@@ -38,7 +38,7 @@
         "payload_kg": 179,
         "engine_type": "Electric motor",
         "fuel": "Electric",
-        "vins": [],
+        "vins": ["0C51"],
         "sources": ["CE04_CE04.pdf", "CE04_CE04_0C53.pdf"]
     },
     {
@@ -82,6 +82,20 @@
         "fuel": "Petrol",
         "vins": ["0B08", "0K51"],
         "sources": ["F800GS_K80_00GS.pdf"]
+    },
+    {
+        "model": "F850GS",
+        "type_code": "K81",
+        "engine_cc": 853,
+        "power_kw": 70,
+        "horsepower": 95,
+        "kerb_weight_kg": 229,
+        "gross_weight_kg": 445,
+        "payload_kg": 216,
+        "engine_type": "2-cylinder inline",
+        "fuel": "Petrol",
+        "vins": ["0B09", "0K51"],
+        "sources": ["F850GS_K81.pdf"]
     },
     {
         "model": "F900GSADVENTURE",
@@ -136,7 +150,7 @@
         "payload_kg": 170,
         "engine_type": "Single-cylinder",
         "fuel": "Petrol",
-        "vins": [],
+        "vins": ["0G12"],
         "sources": ["G310GS_K02_0G12.pdf"]
     },
     {
@@ -150,7 +164,7 @@
         "payload_kg": 181,
         "engine_type": "Single-cylinder",
         "fuel": "Petrol",
-        "vins": [],
+        "vins": ["0G11"],
         "sources": ["G310R_K03_0G11.pdf"]
     },
     {
@@ -194,6 +208,20 @@
         "fuel": "Petrol",
         "vins": ["0N61"],
         "sources": ["R18_ROCTANE_K34.pdf"]
+    },
+    {
+        "model": "R18 B",
+        "type_code": "K35",
+        "engine_cc": 1802,
+        "power_kw": 67,
+        "horsepower": 91,
+        "kerb_weight_kg": 398,
+        "gross_weight_kg": 630,
+        "payload_kg": 232,
+        "engine_type": "2-cylinder boxer",
+        "fuel": "Petrol",
+        "vins": ["0L11"],
+        "sources": ["R18B_K35_0L11.pdf"]
     },
     {
         "model": "K1600GTL",
@@ -346,7 +374,7 @@
         "payload_kg": 229,
         "engine_type": "2-cylinder boxer",
         "fuel": "Petrol",
-        "vins": [],
+        "vins": ["0M41"],
         "sources": ["R 1300 RT - 0M43 USA.pdf"]
     },
     {
@@ -402,7 +430,7 @@
         "payload_kg": 220,
         "engine_type": "2-cylinder boxer",
         "fuel": "Petrol",
-        "vins": [],
+        "vins": ["0A02"],
         "sources": ["R 1200 GS Adventure - 0A02 EUR.pdf", "R 1200 GS Adventure - 0A22 EUR.pdf"]
     },
     {
@@ -430,7 +458,7 @@
         "payload_kg": 216,
         "engine_type": "2-cylinder boxer",
         "fuel": "Petrol",
-        "vins": [],
+        "vins": ["0J91"],
         "sources": ["R1250GS_K51.pdf"]
     },
     {
@@ -444,7 +472,7 @@
         "payload_kg": 226,
         "engine_type": "2-cylinder boxer",
         "fuel": "Petrol",
-        "vins": [],
+        "vins": ["0J61"],
         "sources": ["R1250RT_K52.pdf"]
     },
     {
@@ -458,7 +486,7 @@
         "payload_kg": 221,
         "engine_type": "2-cylinder boxer",
         "fuel": "Petrol",
-        "vins": [],
+        "vins": ["0M83"],
         "sources": ["R1250R_K53_0M83.pdf"]
     },
     {
@@ -474,6 +502,20 @@
         "fuel": "Petrol",
         "vins": ["0J01"],
         "sources": ["RNINET_K21_0L93.pdf"]
+    },
+    {
+        "model": "RNINET SCRAMBLER",
+        "type_code": "K23",
+        "engine_cc": 1170,
+        "power_kw": 80,
+        "horsepower": 109,
+        "kerb_weight_kg": 223,
+        "gross_weight_kg": 430,
+        "payload_kg": 207,
+        "engine_type": "2-cylinder boxer",
+        "fuel": "Petrol",
+        "vins": ["0J31"],
+        "sources": ["RNINET_SCRAMBLER_K23.pdf"]
     },
     {
         "model": "S1000RR",
