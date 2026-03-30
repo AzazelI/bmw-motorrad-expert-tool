@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-import json, os
+import os
 from supabase import create_client, Client
 from datetime import datetime
 
@@ -39,22 +39,6 @@ limiter.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
-
-# =========================
-# MOTORCYCLE JSON LOAD
-# =========================
-BASE_DIR = os.path.dirname(__file__)
-MOTOR_DB_PATH = os.path.join(BASE_DIR, "specs_database", "motorcycle_specs_database.json")
-if not os.path.exists(MOTOR_DB_PATH):
-    MOTOR_DB_PATH = os.path.join(BASE_DIR, "motorcycle_specs_database.json")
-
-try:
-    with open(MOTOR_DB_PATH, "r", encoding="utf-8") as f:
-        motor_database = json.load(f)
-        print(f"✅ Motor DB Loaded: {len(motor_database)} bikes")
-except Exception as e:
-    print("❌ Motor DB ERROR:", e)
-    motor_database = []
 
 # =========================
 # USER CLASS & LOADER
@@ -144,7 +128,7 @@ def logout():
     return redirect(url_for("login"))
 
 # =========================
-# 🔍 SEARCH LOGIC (UPDATED & ADVANCED)
+# 🔍 SEARCH LOGIC (POWERED BY SUPABASE)
 # =========================
 @app.route("/search", methods=["POST"])
 @login_required
@@ -156,18 +140,21 @@ def search():
             return jsonify({"error": "Empty query"})
         
         log_search(current_user.id, query)
-        results = []
         
-        # VIN-ის 4-ნიშნა კოდის ამოღება (სიმბოლოები 4-7)
+        # 🚀 1. ვიღებთ მონაცემებს პირდაპირ Supabase-დან
+        db_response = supabase.table("motorcycles").select("*").execute()
+        motor_database = db_response.data
+        
+        results = []
         vin_code = query[3:7] if len(query) >= 7 else query
 
+        # 🚀 2. ვძებნით Supabase-დან წამოღებულ მონაცემებში
         for bike in motor_database:
             model = str(bike.get("model", "")).upper()
             type_code = str(bike.get("type_code", "")).upper()
-            engine_type = str(bike.get("engine_type", "")).upper() # Advanced search-ისთვის
+            engine_type = str(bike.get("engine_type", "")).upper()
             
-            # VIN მონაცემების დამუშავება
-            vin_data = bike.get("vins", bike.get("vin", bike.get("vin_codes", [])))
+            vin_data = bike.get("vins", [])
             if isinstance(vin_data, str): 
                 vin_list = [vin_data.upper()]
             elif isinstance(vin_data, list): 
@@ -178,18 +165,15 @@ def search():
             match = False
             detected = "—"
             
-            # ძებნა მოდელში, კოდში, ძრავის ტიპში (Boxer/Inline) ან VIN-ში
             if query in model or query == type_code or query in engine_type:
                 match = True
                 detected = vin_list[0] if vin_list else "—"
             elif query in vin_list or vin_code in vin_list:
                 match = True
-                # თუ 10+ სიმბოლოა, თავად კვერია ნამდვილი VIN, თუ 4 - მაშინ ის ფრაგმენტია
                 detected = query if len(query) >= 7 else (vin_list[0] if vin_list else "—")
 
             if match:
                 bike_copy = bike.copy()
-                # გადავცემთ detected_vin-ს, რომ frontend-მა გამოაჩინოს 4 ნიშნა მაჩვენებელი
                 bike_copy["detected_vin"] = detected
                 results.append(bike_copy)
 
