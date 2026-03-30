@@ -2,15 +2,16 @@
 <html lang="en">
 
 <head>
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='GT.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='GT.png') }}">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BMW Motorrad Expert Tool</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<!-- 🔐 TOP BAR -->
 <div class="top-bar">
     <div class="left">
         <img src="{{ url_for('static', filename='GT.png') }}" class="mini-logo" onclick="goHome()">
@@ -19,103 +20,103 @@
 
     <div class="right">
         <span class="user">👤 {{ user }}</span>
-
         {% if user == "admin" %}
             <a href="/admin" class="admin-btn">Admin</a>
         {% endif %}
-
         <button class="logout-btn" onclick="window.location.href='/logout'">Logout</button>
     </div>
 </div>
 
-<!-- BACKGROUND OVERLAY -->
 <div class="overlay"></div>
 
 <div class="container">
 
-    <!-- 🔥 HERO SECTION -->
     <div class="hero">
-        <!-- ✅ FIX: clickable logo -->
         <img src="{{ url_for('static', filename='GT.png') }}" class="logo" onclick="goHome()">
-
         <h1>BMW Motorrad Expert Tool</h1>
         <p class="subtitle">Search models, VIN codes & technical data instantly</p>
     </div>
 
-    <!-- 🔍 SEARCH CARD -->
     <div class="search-card">
-
         <div class="search-box">
-            <input id="search" placeholder="Enter Model, Type Code (K66) or VIN (4–7)">
+            <input id="search" placeholder="Enter Model, Type Code (K66) or VIN (4–7)" onkeypress="handleKeyPress(event)">
             <button class="search-btn" onclick="search()">🔍</button>
         </div>
-
         <button class="main-search" onclick="search()">Search</button>
-
-        <p class="vin-hint" onclick="openHelp()">
+        <p class="vin-hint" onclick="openModal('vinHelp')">
             ℹ️ VIN Help (characters 4–7)
         </p>
-
     </div>
 
-    <!-- ⚙ ACTIONS -->
     <div class="actions">
         <button class="btn secondary" onclick="toggleAdvanced()">🔎 Advanced</button>
         <button class="btn secondary" onclick="showRecent()">🕘 Recent</button>
-        <button class="btn secondary" onclick="window.location.href='/about'">ℹ About</button>
+        <button class="btn secondary" onclick="openModal('aboutModal')">ℹ About</button>
     </div>
 
-    <!-- 📊 QUICK ACCESS CARDS -->
     <div class="cards">
-        <div class="card">🏁 Technical Docs</div>
-        <div class="card">🧰 Parts Info</div>
-        <div class="card">📞 Support</div>
+        <div class="card" onclick="openModal('docsModal')">🏁 Technical Docs</div>
+        <div class="card" onclick="window.open('https://aos.bmwgroup.com/', '_blank')">🧰 Parts Info</div>
+        <div class="card" onclick="openModal('supportModal')">📞 Support</div>
     </div>
 
-    <!-- 📦 RESULT -->
     <div id="result" class="result"></div>
 
 </div>
 
-<!-- 🪟 VIN HELP MODAL -->
 <div id="vinHelp" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeHelp()">&times;</span>
-
+        <span class="close" onclick="closeModal('vinHelp')">&times;</span>
         <h3>VIN Code Guide</h3>
-
         <p>Use characters <b>4–7</b> from your VIN</p>
-
-        <div class="vin-example">
-            WB1 <span class="highlight">0380</span> 038ZU48517
-        </div>
-
+        <div class="vin-example">WB1 <span class="highlight">0380</span> 038ZU48517</div>
         <p class="hint">Example: <b>0380</b></p>
     </div>
 </div>
 
-<!-- 👣 FOOTER -->
+<div id="aboutModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('aboutModal')">&times;</span>
+        <h3>ℹ About This Tool</h3>
+        <p>This internal expert system is developed specifically for official BMW Motorrad staff and technical appraisers.</p>
+        <p>It provides high-precision data on weight and engine specifications to ensure accuracy in official technical assessments.</p>
+        <p style="font-size: 11px; opacity: 0.6; margin-top: 15px;">Version 2.0 | Developed for GT Motors</p>
+    </div>
+</div>
+
+<div id="supportModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('supportModal')">&times;</span>
+        <h3>📞 Technical Support</h3>
+        <p>For model requests or technical issues, contact G. Jananashvili:</p>
+        <div style="background: rgba(46, 140, 255, 0.1); padding: 15px; border-radius: 8px; margin: 10px 0; text-align: left;">
+            <p onclick="window.open('https://wa.me/995595078098', '_blank')" style="cursor:pointer;">🟢 <b>WhatsApp:</b> +995 595 07 80 98</p>
+            <p onclick="sendEmail()" style="cursor:pointer;">📧 <b>Email:</b> <span style="color: #2e8cff; text-decoration: underline;">givijananashvili40@gmail.com</span></p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button class="main-search" style="flex: 1;" onclick="window.open('https://wa.me/995595078098', '_blank')">WhatsApp</button>
+            <button class="main-search" style="flex: 1; background: #444;" onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+</div>
+
+<div id="docsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('docsModal')">&times;</span>
+        <h3>🏁 Technical Documentation</h3>
+        <p>Access PDF data sheets and official guides.</p>
+        <div style="border: 1px dashed #444; padding: 20px; border-radius: 8px; margin-top: 10px;">
+            <p style="color: #888;">⚠️ Folder not linked. Please upload your expert PDF files to the local /static/docs/ directory or link your Google Drive.</p>
+        </div>
+    </div>
+</div>
+
 <footer class="creator">
     <span>Created by</span>
     <strong>G. Jananashvili</strong>
 </footer>
 
-<!-- SCRIPTS -->
 <script src="{{ url_for('static', filename='script.js') }}"></script>
-
-<script>
-function openHelp() {
-    document.getElementById("vinHelp").style.display = "flex";
-}
-
-function closeHelp() {
-    document.getElementById("vinHelp").style.display = "none";
-}
-
-function goHome() {
-    window.location.href = "/";
-}
-</script>
 
 </body>
 </html>

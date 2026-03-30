@@ -144,7 +144,7 @@ def logout():
     return redirect(url_for("login"))
 
 # =========================
-# 🔍 SEARCH LOGIC (UPDATED)
+# 🔍 SEARCH LOGIC (UPDATED & ADVANCED)
 # =========================
 @app.route("/search", methods=["POST"])
 @login_required
@@ -157,15 +157,17 @@ def search():
         
         log_search(current_user.id, query)
         results = []
+        
+        # VIN-ის 4-ნიშნა კოდის ამოღება (სიმბოლოები 4-7)
         vin_code = query[3:7] if len(query) >= 7 else query
 
         for bike in motor_database:
             model = str(bike.get("model", "")).upper()
             type_code = str(bike.get("type_code", "")).upper()
+            engine_type = str(bike.get("engine_type", "")).upper() # Advanced search-ისთვის
             
-            # ჩასწორებული: ვამოწმებთ "vins", "vin" და "vin_codes" ველებს
+            # VIN მონაცემების დამუშავება
             vin_data = bike.get("vins", bike.get("vin", bike.get("vin_codes", [])))
-            
             if isinstance(vin_data, str): 
                 vin_list = [vin_data.upper()]
             elif isinstance(vin_data, list): 
@@ -176,17 +178,18 @@ def search():
             match = False
             detected = "—"
             
-            # ძებნა მოდელში, კოდში ან VIN-ების სიაში
-            if query in model or query == type_code:
+            # ძებნა მოდელში, კოდში, ძრავის ტიპში (Boxer/Inline) ან VIN-ში
+            if query in model or query == type_code or query in engine_type:
                 match = True
                 detected = vin_list[0] if vin_list else "—"
             elif query in vin_list or vin_code in vin_list:
                 match = True
+                # თუ 10+ სიმბოლოა, თავად კვერია ნამდვილი VIN, თუ 4 - მაშინ ის ფრაგმენტია
                 detected = query if len(query) >= 7 else (vin_list[0] if vin_list else "—")
 
             if match:
                 bike_copy = bike.copy()
-                # ვინახავთ ნაპოვნ VIN-ს, რომ წინა მხარემ (frontend) მარტივად გამოიყენოს
+                # გადავცემთ detected_vin-ს, რომ frontend-მა გამოაჩინოს 4 ნიშნა მაჩვენებელი
                 bike_copy["detected_vin"] = detected
                 results.append(bike_copy)
 
@@ -235,7 +238,9 @@ def clear_logs():
 @login_required
 def add_user():
     if current_user.role != "admin": return jsonify({"error": "Unauthorized"}), 403
-    username = request.form.get("username"); password = request.form.get("password"); role = request.form.get("role", "user")
+    username = request.form.get("username")
+    password = request.form.get("password")
+    role = request.form.get("role", "user")
     if not username or not password: return redirect(url_for("admin"))
     hashed_pw = bcrypt.generate_password_hash(password).decode("utf-8")
     try:
