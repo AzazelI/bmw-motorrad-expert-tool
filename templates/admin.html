@@ -7,13 +7,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
         body { display: block !important; padding-top: 80px; text-align: center; background-color: #0b0e14; font-family: sans-serif; }
-        .admin-container { width: 90%; max-width: 900px; margin: 20px auto; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: #0f1423; padding: 15px 30px; position: fixed; top: 0; width: 100%; box-sizing: border-box; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .admin-container { width: 90%; max-width: 1000px; margin: 20px auto; }
         .admin-table { width: 100%; background: rgba(15, 20, 35, 0.9); border-radius: 12px; border-collapse: collapse; overflow: hidden; margin-bottom: 40px; }
         .admin-table th, .admin-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); color: white; font-size: 14px; }
         .admin-table th { background: rgba(255,255,255,0.05); color: #2e8cff; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
-        .add-user-box { background: rgba(46, 140, 255, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(46, 140, 255, 0.2); margin-bottom: 30px; text-align: left; }
-        .add-user-box input, .add-user-box select { padding: 10px; border-radius: 6px; border: 1px solid #333; background: #161b29; color: white; margin-right: 10px; }
-        .btn-add { background: #2e8cff; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .add-box { background: rgba(46, 140, 255, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(46, 140, 255, 0.2); margin-bottom: 30px; text-align: left; }
+        .add-box input, .add-box select { padding: 10px; border-radius: 6px; border: 1px solid #333; background: #161b29; color: white; box-sizing: border-box; }
+        
+        /* ახალი კლასი მოტოების დასამატებელი ფორმისთვის */
+        .bike-form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
+        .bike-form-grid input { width: 100%; }
+        
+        .btn-add { background: #2e8cff; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-add:hover { background: #1a73e8; }
         .btn-delete { background: #ff4d4d; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .btn-clear { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; transition: 0.3s; }
         .btn-clear:hover { background: #ff4d4d; color: white; }
@@ -23,9 +30,9 @@
 </head>
 <body>
     <div class="top-bar">
-        <div class="left">
+        <div class="left" style="display:flex; align-items:center;">
             <img src="/static/GT.png" class="mini-logo" onclick="window.location.href='/'" style="cursor:pointer; width:40px;">
-            <span class="app-name" style="color:white; margin-left:10px;">Admin Dashboard</span>
+            <span class="app-name" style="color:white; margin-left:10px; font-weight:bold;">Admin Dashboard</span>
         </div>
         <div class="right">
             <a href="/" style="color:white; margin-right:15px; text-decoration:none;">Home</a>
@@ -35,12 +42,75 @@
 
     <div class="admin-container">
         <h2>Control Panel</h2>
+        
+        <div class="section-title">Add New Motorcycle</div>
+        <div class="add-box">
+            <form action="/add-bike" method="POST">
+                <div class="bike-form-grid">
+                    <input type="text" name="model" placeholder="Model (e.g. R 1300 GS)" required>
+                    <input type="text" name="type_code" placeholder="Type Code (e.g. 0M21)" required>
+                    <input type="text" name="engine_cc" placeholder="Engine CC (e.g. 1300)">
+                    <input type="text" name="engine_type" placeholder="Engine Type (e.g. Boxer)">
+                    
+                    <input type="text" name="power_kw" placeholder="Power (kW)">
+                    <input type="text" name="horsepower" placeholder="Horsepower (hp)">
+                    <input type="text" name="kerb_weight_kg" placeholder="Kerb Weight (kg)">
+                    <input type="text" name="gross_weight_kg" placeholder="Gross Weight (kg)">
+                    
+                    <input type="text" name="payload_kg" placeholder="Payload (kg)">
+                    <input type="text" name="fuel" placeholder="Fuel (e.g. Petrol)">
+                    <input type="text" name="vins" placeholder="VINs (comma separated, e.g. 0M21, 0M22)" style="grid-column: span 2;">
+                    
+                    <input type="text" name="sources" placeholder="PDF Sources (comma separated)" style="grid-column: span 4;">
+                </div>
+                <button type="submit" class="btn-add" style="width: 100%;">+ Add Motorcycle to Database</button>
+            </form>
+        </div>
+
+        <div class="section-title">Motorcycles Database (Total: {{ bikes|length }})</div>
+        <div style="max-height: 400px; overflow-y: auto; margin-bottom: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+            <table class="admin-table" style="margin-bottom: 0;">
+                <thead style="position: sticky; top: 0; background: #0f1423; z-index: 10;">
+                    <tr>
+                        <th>Model</th>
+                        <th>Code</th>
+                        <th>Weight</th>
+                        <th>VINs</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bike in bikes %}
+                    <tr>
+                        <td><strong>{{ bike.model }}</strong></td>
+                        <td style="color: #2e8cff;">{{ bike.type_code }}</td>
+                        <td>{{ bike.kerb_weight_kg }} kg</td>
+                        <td style="font-size: 11px; color: #888;">
+                            {% if bike.vins %}
+                                {{ bike.vins | join(', ') }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form action="/delete-bike/{{ bike.id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{ bike.model }}?');">
+                                <button type="submit" class="btn-delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" style="text-align: center; color: #555;">No motorcycles found in database</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
         <div class="section-title">Add New User</div>
-        <div class="add-user-box">
+        <div class="add-box">
             <form action="/add-user" method="POST" style="display: flex; flex-wrap: wrap; align-items: center;">
-                <input type="text" name="username" placeholder="Username" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <select name="role"><option value="user">User</option><option value="admin">Admin</option></select>
+                <input type="text" name="username" placeholder="Username" required style="margin-right: 10px;">
+                <input type="password" name="password" placeholder="Password" required style="margin-right: 10px;">
+                <select name="role" style="margin-right: 10px;"><option value="user">User</option><option value="admin">Admin</option></select>
                 <button type="submit" class="btn-add">Create</button>
             </form>
         </div>
@@ -76,7 +146,7 @@
                 <tr>
                     <td>{{ log.username }}</td>
                     <td style="color: #f1c40f;">{{ log.query }}</td>
-                    <td style="color: #888; font-size: 12px;">{{ log.created_at }}</td>
+                    <td style="color: #888; font-size: 12px;">{{ log.created_at[:16].replace('T', ' ') }}</td>
                 </tr>
                 {% else %}
                 <tr><td colspan="3" style="text-align: center; color: #555;">No logs found</td></tr>
