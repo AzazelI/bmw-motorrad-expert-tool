@@ -81,6 +81,9 @@ def register():
 @limiter.limit("10 per minute")
 def login():
     if current_user.is_authenticated: return redirect(url_for("home"))
+    
+    error = None # ვამატებთ error ცვლადს, რომელიც GET მოთხოვნისას ცარიელია
+    
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -92,8 +95,13 @@ def login():
                 user_obj = User(user_data[0]["username"], user_data[0]["role"])
                 login_user(user_obj, remember=remember)
                 return redirect(url_for("home"))
-        except: pass
-    return render_template("login.html", error="არასწორი მონაცემები")
+            else:
+                error = "არასწორი მონაცემები" # ერორი ენიჭება მხოლოდ არასწორი მონაცემების დროს
+        except: 
+            error = "არასწორი მონაცემები"
+            
+    # GET-ზე გადააწვდის error=None, ხოლო POST-ზე შეცდომის ტექსტს
+    return render_template("login.html", error=error)
 
 @app.route("/logout")
 @login_required
@@ -116,6 +124,9 @@ def search():
         db_response = supabase.table("motorcycles").select("*").execute()
         motor_database = db_response.data
         results = []
+        
+        # ვშლით სფეისებს საძიებო სიტყვიდან (მაგ: "K 1600" ხდება "K1600")
+        clean_query = query.replace(" ", "")
         vin_code = query[3:7] if len(query) >= 7 else query
 
         for bike in motor_database:
@@ -123,13 +134,19 @@ def search():
             type_code = str(bike.get("type_code", "")).upper()
             engine_type = str(bike.get("engine_type", "")).upper()
             
+            # ვშლით სფეისებს ბაზაში არსებული ჩანაწერებიდანაც
+            clean_model = model.replace(" ", "")
+            clean_type_code = type_code.replace(" ", "")
+            clean_engine_type = engine_type.replace(" ", "")
+            
             vin_data = bike.get("vins", [])
             vin_list = [str(v).upper() for v in vin_data] if isinstance(vin_data, list) else ([str(vin_data).upper()] if isinstance(vin_data, str) else [])
 
             match = False
             detected = "—"
             
-            if query in model or query == type_code or query in engine_type:
+            # ვადარებთ გასუფთავებულ ვერსიებს ერთმანეთს
+            if (clean_query in clean_model) or (clean_query in clean_type_code) or (clean_query in clean_engine_type):
                 match = True
                 detected = vin_list[0] if vin_list else "—"
             elif query in vin_list or vin_code in vin_list:
@@ -143,7 +160,9 @@ def search():
 
         if not results: return jsonify({"error": "Model not found"})
         return jsonify(results)
-    except: return jsonify({"error": "Server error"})
+    except Exception as e:
+        print("Search error:", e)
+        return jsonify({"error": "Server error"})
 
 # =========================
 # 🛠️ ADMIN PANEL

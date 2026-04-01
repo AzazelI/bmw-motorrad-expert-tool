@@ -161,21 +161,118 @@ body {
 .spec { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
 
 /* ========================= */
-/* AUTH PAGES */
+/* AUTH PAGES (განახლებული) */
 /* ========================= */
 .auth-container { width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+
 .auth-card {
-    width: 380px; background: rgba(20,25,40,0.8); backdrop-filter: blur(20px);
-    border-radius: 18px; padding: 40px; box-shadow: 0 25px 70px rgba(0,0,0,0.8);
-    border: 1px solid rgba(255,255,255,0.06); text-align: center;
+    width: 380px; 
+    background: rgba(20,25,40,0.8); 
+    backdrop-filter: blur(20px);
+    border-radius: 18px; 
+    padding: 40px; 
+    box-shadow: 0 25px 70px rgba(0,0,0,0.8);
+    border: 1px solid rgba(255,255,255,0.06); 
+    text-align: center;
+    animation: fadeIn 0.6s ease-out;
 }
-.auth-card input {
-    width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.05); background: #161b29; color: white; outline: none;
+
+.auth-card h2 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #ffffff;
+    letter-spacing: 1px;
 }
+
+.auth-card .error {
+    background: rgba(255, 77, 77, 0.1);
+    color: #ff4d4d;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 77, 77, 0.3);
+}
+
+.auth-card input[type="text"],
+.auth-card input[type="password"] {
+    width: 100%; 
+    padding: 14px; 
+    margin-bottom: 15px; 
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.05); 
+    background: #161b29; 
+    color: white; 
+    outline: none;
+    transition: 0.3s;
+}
+
+.auth-card input[type="text"]:focus,
+.auth-card input[type="password"]:focus {
+    border-color: #2e8cff;
+    box-shadow: 0 0 12px rgba(46, 140, 255, 0.25);
+    background: #1a2033;
+}
+
+.auth-card .remember {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 20px;
+    margin-top: -5px;
+}
+
+.auth-card .remember label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.auth-card .remember input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+    margin-bottom: 0;
+    cursor: pointer;
+    accent-color: #2e8cff;
+}
+
 .auth-card button {
-    width: 100%; padding: 14px; border: none; border-radius: 10px;
-    background: linear-gradient(135deg, #2e8cff, #1c69d4); color: white; font-weight: 600; cursor: pointer;
+    width: 100%; 
+    padding: 14px; 
+    border: none; 
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2e8cff, #1c69d4); 
+    color: white; 
+    font-size: 15px;
+    font-weight: 600; 
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.auth-card button:hover {
+    box-shadow: 0 0 20px rgba(46, 140, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.auth-card .switch {
+    margin-top: 25px;
+    font-size: 14px;
+    color: #888;
+}
+
+.auth-card .switch a {
+    color: #2e8cff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+    margin-left: 5px;
+}
+
+.auth-card .switch a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(46, 140, 255, 0.6);
 }
 
 /* ========================= */
@@ -191,9 +288,9 @@ body {
     background: rgba(0,0,0,0.85); 
     z-index: 1500; 
     justify-content: center; 
-    align-items: flex-start; /* შეცვლილია: იწყება ზემოდან */
+    align-items: flex-start; 
     padding: 40px 15px;
-    overflow-y: auto; /* აუცილებელია დიდი მოდალის სქროლისთვის */
+    overflow-y: auto; 
 }
 
 .modal-content { 
@@ -235,7 +332,7 @@ body {
     backdrop-filter: blur(10px); 
     border-top: 1px solid #2e8cff; 
     padding: 15px 20px; 
-    z-index: 2000; /* უნდა იყოს მოდალზე მაღლა */
+    z-index: 2000; 
     box-shadow: 0 -5px 20px rgba(0,0,0,0.5); 
     box-sizing: border-box; 
 }
@@ -261,20 +358,19 @@ body {
     border: 1px solid rgba(46,140,255,0.2);
     border-radius: 16px;
     padding: 30px;
-    margin-bottom: 80px; /* ტოვებს ადგილს ქვედა ტრეისთვის */
+    margin-bottom: 80px; 
 }
 
 .table-responsive { 
     overflow-x: auto; 
     overflow-y: auto;
-    max-height: 65vh; /* ზღუდავს ცხრილის სიმაღლეს, რომ სათაური არ დაიკარგოს */
+    max-height: 65vh; 
     margin-top: 20px; 
     border-radius: 10px; 
     border: 1px solid rgba(255,255,255,0.05); 
     background: rgba(0,0,0,0.2);
 }
 
-/* სქროლბარის სტილი */
 .table-responsive::-webkit-scrollbar { width: 6px; height: 6px; }
 .table-responsive::-webkit-scrollbar-thumb { background: #2e8cff; border-radius: 10px; }
 
