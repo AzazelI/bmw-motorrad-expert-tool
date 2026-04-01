@@ -64,6 +64,27 @@
 
 </div>
 
+<div id="compareTray" class="compare-tray">
+    <div class="compare-tray-content">
+        <span id="compareCountText" style="font-size: 14px;"><strong>0</strong> motorcycles selected for comparison</span>
+        <div class="compare-actions">
+            <button class="btn-compare-action" onclick="openCompareModal()">⚖️ Compare Now</button>
+            <button class="btn-compare-clear" onclick="clearCompare()">🗑️ Clear</button>
+        </div>
+    </div>
+</div>
+
+<div id="compareModal" class="modal">
+    <div class="modal-content compare-modal-content">
+        <span class="close" onclick="closeModal('compareModal')">&times;</span>
+        <h3 style="color: white; margin-top: 0;">⚖️ Compare Motorcycles</h3>
+        <div class="table-responsive">
+            <table class="compare-table" id="compareTable">
+                </table>
+        </div>
+    </div>
+</div>
+
 <div id="vinHelp" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('vinHelp')">&times;</span>

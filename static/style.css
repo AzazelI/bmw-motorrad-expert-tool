@@ -65,7 +65,7 @@ body {
 .admin-btn:hover { background: rgba(46,140,255,0.6); }
 
 /* ========================= */
-/* MAIN CONTAINER (აღარ იწელება) */
+/* MAIN CONTAINER */
 /* ========================= */
 .container {
     width: 600px;
@@ -86,7 +86,7 @@ body {
 .subtitle { font-size: 13px; color: #aaa; margin-bottom: 25px; }
 
 /* ========================= */
-/* SEARCH & VIN HINT (გასწორებული) */
+/* SEARCH & VIN HINT */
 /* ========================= */
 .search-box { display: flex; margin-bottom: 10px; }
 .search-box input {
@@ -105,7 +105,7 @@ body {
     color: #9fc3ff; 
     margin-top: 10px; 
     text-align: center; 
-    cursor: pointer; /* მაუსის კურსორი შეიცვლება */
+    cursor: pointer; 
     transition: 0.2s;
     display: block;
 }
@@ -119,7 +119,7 @@ body {
 .main-search:hover { box-shadow: 0 0 25px rgba(46,140,255,0.7); transform: translateY(-1px); }
 
 /* ========================= */
-/* 3 ACTION BUTTONS (Advanced, Recent, About) */
+/* 3 ACTION BUTTONS */
 /* ========================= */
 .actions { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
 .btn.secondary { 
@@ -128,7 +128,7 @@ body {
     border-radius: 8px; 
     color: white; 
     border: none; 
-    cursor: pointer; /* კურსორი გასწორდა */
+    cursor: pointer;
     transition: 0.3s;
     font-size: 14px;
 }
@@ -138,7 +138,7 @@ body {
 }
 
 /* ========================= */
-/* CARDS (ქვედა 3 ღილაკი) */
+/* CARDS */
 /* ========================= */
 .cards { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
 .card { 
@@ -161,7 +161,7 @@ body {
 .spec { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
 
 /* ========================= */
-/* AUTH PAGES (LOGIN / REGISTER) */
+/* AUTH PAGES */
 /* ========================= */
 .auth-container { width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
 .auth-card {
@@ -179,11 +179,35 @@ body {
 }
 
 /* ========================= */
-/* MODAL & CREATOR */
+/* MODAL (გასწორებული პოზიციონირება) */
 /* ========================= */
-.modal { display: none; position: fixed; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; justify-content: center; align-items: center; }
-.modal-content { background: #111; padding: 25px; width: 400px; border-radius: 12px; text-align: center; }
-.close { float: right; cursor: pointer; font-size: 20px; }
+.modal { 
+    display: none; 
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.85); 
+    z-index: 1500; 
+    justify-content: center; 
+    align-items: flex-start; /* შეცვლილია: იწყება ზემოდან */
+    padding: 40px 15px;
+    overflow-y: auto; /* აუცილებელია დიდი მოდალის სქროლისთვის */
+}
+
+.modal-content { 
+    background: #111; 
+    padding: 25px; 
+    width: 400px; 
+    border-radius: 12px; 
+    text-align: center;
+    position: relative;
+}
+
+.close { float: right; cursor: pointer; font-size: 20px; color: #666; transition: 0.2s; }
+.close:hover { color: white; }
+
 .creator { position: fixed; bottom: 10px; left: 15px; font-size: 12px; color: rgba(255,255,255,0.4); }
 .creator strong { color: #2e8cff; }
 
@@ -197,3 +221,69 @@ body {
     .actions, .cards { flex-direction: column; }
     .card { width: 100%; }
 }
+
+/* ==========================================
+   ⚖️ COMPARE FEATURE STYLES (გასწორებული)
+   ========================================== */
+.compare-tray { 
+    display: none; 
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    background: rgba(15, 20, 35, 0.95); 
+    backdrop-filter: blur(10px); 
+    border-top: 1px solid #2e8cff; 
+    padding: 15px 20px; 
+    z-index: 2000; /* უნდა იყოს მოდალზე მაღლა */
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.5); 
+    box-sizing: border-box; 
+}
+
+.compare-tray-content { 
+    max-width: 900px; 
+    margin: 0 auto; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    color: white; 
+}
+
+.btn-compare-action { background: #2e8cff; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+.btn-compare-action:hover { background: #1a73e8; }
+.btn-compare-clear { background: transparent; color: #ff4d4d; border: 1px solid #ff4d4d; padding: 10px 15px; border-radius: 6px; cursor: pointer; margin-left: 10px; transition: 0.3s; }
+.btn-compare-clear:hover { background: #ff4d4d; color: white; }
+
+.compare-modal-content { 
+    max-width: 1100px; 
+    width: 95%; 
+    background: #0b0e14; 
+    border: 1px solid rgba(46,140,255,0.2);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 80px; /* ტოვებს ადგილს ქვედა ტრეისთვის */
+}
+
+.table-responsive { 
+    overflow-x: auto; 
+    overflow-y: auto;
+    max-height: 65vh; /* ზღუდავს ცხრილის სიმაღლეს, რომ სათაური არ დაიკარგოს */
+    margin-top: 20px; 
+    border-radius: 10px; 
+    border: 1px solid rgba(255,255,255,0.05); 
+    background: rgba(0,0,0,0.2);
+}
+
+/* სქროლბარის სტილი */
+.table-responsive::-webkit-scrollbar { width: 6px; height: 6px; }
+.table-responsive::-webkit-scrollbar-thumb { background: #2e8cff; border-radius: 10px; }
+
+.compare-table { width: 100%; border-collapse: collapse; color: white; text-align: left; font-size: 14px; min-width: 600px; }
+.compare-table th, .compare-table td { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); }
+.compare-table th { background: rgba(46, 140, 255, 0.1); color: #2e8cff; font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; position: sticky; top: 0; z-index: 5; }
+.compare-table tr td:first-child { font-weight: bold; color: #888; background: rgba(255,255,255,0.02); width: 160px; }
+
+.remove-bike-btn { color: #ff4d4d; background: none; border: none; cursor: pointer; font-size: 11px; margin-top: 5px; text-decoration: underline; }
+
+.btn-add-compare { background: transparent; border: 1px solid #f1c40f; color: #f1c40f; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-top: 10px; width: 100%; transition: 0.3s; }
+.btn-add-compare:hover { background: #f1c40f; color: #000; }

@@ -43,6 +43,10 @@ async function search() {
                 <div class="spec"><span>Gross Weight</span><span>${bike.gross_weight_kg || "N/A"} kg</span></div>
                 <div class="spec"><span>Engine Type</span><span>${bike.engine_type || "Unknown"}</span></div>
                 <div class="spec"><span>Fuel</span><span>${bike.fuel || "N/A"}</span></div>
+                
+                <button class="btn-add-compare" onclick="addToCompare('${encodeURIComponent(JSON.stringify(bike))}')">
+                    + Add to Compare
+                </button>
             </div>`;
         });
         result.innerHTML = html;
@@ -129,4 +133,91 @@ function toggleAdvanced() {
 
 function sendEmail() {
     window.location.href = "mailto:givijananashvili40@gmail.com?subject=BMW Motorrad Tool Request";
+}
+
+// ==========================================
+// ⚖️ COMPARE MOTORCYCLES LOGIC
+// ==========================================
+let compareList = [];
+
+function addToCompare(bikeStr) {
+    const bike = JSON.parse(decodeURIComponent(bikeStr));
+    
+    if(compareList.find(b => b.id === bike.id)) {
+        alert("⚠️ This motorcycle is already in your compare list.");
+        return;
+    }
+    if(compareList.length >= 3) {
+        alert("⚠️ You can only compare up to 3 motorcycles at a time.");
+        return;
+    }
+    
+    compareList.push(bike);
+    updateCompareTray();
+}
+
+function updateCompareTray() {
+    const tray = document.getElementById('compareTray');
+    const countText = document.getElementById('compareCountText');
+    
+    if(compareList.length > 0) {
+        tray.style.display = 'block';
+        countText.innerHTML = `<strong style="color:#2e8cff; font-size:18px;">${compareList.length}</strong> motorcycle(s) selected`;
+    } else {
+        tray.style.display = 'none';
+        closeModal('compareModal'); 
+    }
+}
+
+function clearCompare() {
+    compareList = [];
+    updateCompareTray();
+}
+
+function removeCompareItem(index) {
+    compareList.splice(index, 1);
+    updateCompareTray();
+    if(compareList.length > 0) {
+        openCompareModal(); 
+    } else {
+        closeModal('compareModal');
+    }
+}
+
+function openCompareModal() {
+    if(compareList.length === 0) return;
+    
+    const table = document.getElementById('compareTable');
+    
+    let html = `<tr><th>Specifications</th>`;
+    compareList.forEach((bike, index) => {
+        html += `<th>${bike.model} <br><button class="remove-bike-btn" onclick="removeCompareItem(${index})">Remove ✕</button></th>`;
+    });
+    html += `</tr>`;
+
+    const rows = [
+        { label: 'Type Code', key: 'type_code' },
+        { label: 'Engine Type', key: 'engine_type' },
+        { label: 'Engine CC', key: 'engine_cc', suffix: ' cc' },
+        { label: 'Power', key: 'power_kw', suffix: ' kW' },
+        { label: 'Horsepower', key: 'horsepower', suffix: ' hp' },
+        { label: 'Kerb Weight', key: 'kerb_weight_kg', suffix: ' kg' },
+        { label: 'Gross Weight', key: 'gross_weight_kg', suffix: ' kg' },
+        { label: 'Payload', key: 'payload_kg', suffix: ' kg' },
+        { label: 'Fuel', key: 'fuel' }
+    ];
+
+    rows.forEach(row => {
+        html += `<tr><td>${row.label}</td>`;
+        compareList.forEach(bike => {
+            const val = (bike[row.key] && bike[row.key] !== "—" && bike[row.key] !== "") 
+                        ? bike[row.key] + (row.suffix || '') 
+                        : '<span style="color:#555;">—</span>';
+            html += `<td>${val}</td>`;
+        });
+        html += `</tr>`;
+    });
+
+    table.innerHTML = html;
+    document.getElementById('compareModal').style.display = 'flex';
 }
