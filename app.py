@@ -13,7 +13,7 @@ from flask_limiter.util import get_remote_address
 app = Flask(__name__)
 
 # =========================
-# 🔒 უსაფრთხოების გასაღებები (დაცული ვერსია)
+# 🔒 უსაფრთხოების გასაღებები
 # =========================
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'super_secret_key_123')
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'jwt_secret_key_456')
@@ -22,7 +22,7 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
 # =========================
-# ☁️ SUPABASE SETUP (დაცული ვერსია)
+# ☁️ SUPABASE SETUP
 # =========================
 SUPABASE_URL = os.environ.get('SUPABASE_URL', 'https://xxtwhxvafgkdrtuqqetu.supabase.co')
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY', 'sb_publishable_js3pEbUOHt__E9EBIoSYfQ_5qVCBImI') 
@@ -30,14 +30,11 @@ SUPABASE_KEY = os.environ.get('SUPABASE_KEY', 'sb_publishable_js3pEbUOHt__E9EBIo
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # =========================
-# 🔥 RATE LIMITER
+# 🔥 RATE LIMITER & LOGIN
 # =========================
 limiter = Limiter(get_remote_address)
 limiter.init_app(app)
 
-# =========================
-# LOGIN SETUP
-# =========================
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
@@ -52,23 +49,16 @@ def load_user(user_id):
     try:
         response = supabase.table("users").select("username, role").eq("username", user_id).execute()
         user_data = response.data
-        if user_data:
-            return User(user_data[0]["username"], user_data[0]["role"])
-    except Exception as e:
-        print(f"❌ Supabase Load User Error: {e}")
+        if user_data: return User(user_data[0]["username"], user_data[0]["role"])
+    except: pass
     return None
 
-# =========================
-# 📊 LOGGING LOGIC
-# =========================
 def log_search(username, query):
-    try:
-        supabase.table("search_logs").insert({"username": username, "query": query}).execute()
-    except Exception as e:
-        print(f"⚠️ Logging Error: {e}")
+    try: supabase.table("search_logs").insert({"username": username, "query": query}).execute()
+    except: pass
 
 # =========================
-# ROUTES (REGISTER & LOGIN)
+# 🔑 AUTH ROUTES
 # =========================
 @app.route("/register", methods=["GET", "POST"])
 @limiter.limit("5 per minute")
@@ -77,8 +67,7 @@ def register():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-        if not username or not password:
-            return render_template("register.html", error="შეავსეთ ყველა ველი")
+        if not username or not password: return render_template("register.html", error="შეავსეთ ყველა ველი")
         hashed_pw = bcrypt.generate_password_hash(password).decode("utf-8")
         try:
             check_user = supabase.table("users").select("username").eq("username", username).execute()
@@ -113,7 +102,7 @@ def logout():
     return redirect(url_for("login"))
 
 # =========================
-# 🔍 SEARCH LOGIC
+# 🔍 SEARCH
 # =========================
 @app.route("/search", methods=["POST"])
 @login_required
@@ -157,25 +146,22 @@ def search():
     except: return jsonify({"error": "Server error"})
 
 # =========================
-# 🛠️ ADMIN PANEL FUNCTIONS
+# 🛠️ ADMIN PANEL
 # =========================
 @app.route("/admin")
 @login_required
 def admin():
     if current_user.role != "admin": return "Access Denied", 403
     try:
-        # ვიღებთ მომხმარებლებს
         users_res = supabase.table("users").select("username, role").execute()
         users_dict = {u["username"]: {"role": u["role"]} for u in users_res.data}
         
-        # ვიღებთ ძებნის ლოგებს
         logs = []
         try:
             log_res = supabase.table("search_logs").select("*").order("created_at", desc=True).limit(20).execute()
             logs = log_res.data
         except: pass
 
-        # ვიღებთ მოტოციკლებს ბაზიდან
         bikes = []
         try:
             bike_res = supabase.table("motorcycles").select("*").order("id", desc=True).execute()
@@ -209,14 +195,39 @@ def add_bike():
             "vins": [v.strip() for v in vins_raw.split(",") if v.strip()],
             "sources": [s.strip() for s in sources_raw.split(",") if s.strip()]
         }
-        
         supabase.table("motorcycles").insert(new_bike).execute()
         return redirect(url_for("admin"))
-    except Exception as e:
-        print("❌ Error adding bike:", e)
-        return "Error adding motorcycle", 500
+    except: return "Error adding motorcycle", 500
 
-# --- მოტოციკლის წაშლა ---
+# --- 🚀 მოტოციკლის რედაქტირება (ახალი) ---
+@app.route("/edit-bike/<int:bike_id>", methods=["POST"])
+@login_required
+def edit_bike(bike_id):
+    if current_user.role != "admin": return "Unauthorized", 403
+    try:
+        vins_raw = request.form.get("vins", "")
+        sources_raw = request.form.get("sources", "")
+        
+        updated_bike = {
+            "model": request.form.get("model", ""),
+            "type_code": request.form.get("type_code", ""),
+            "engine_cc": request.form.get("engine_cc", ""),
+            "power_kw": request.form.get("power_kw", ""),
+            "horsepower": request.form.get("horsepower", ""),
+            "kerb_weight_kg": request.form.get("kerb_weight_kg", ""),
+            "gross_weight_kg": request.form.get("gross_weight_kg", ""),
+            "payload_kg": request.form.get("payload_kg", ""),
+            "engine_type": request.form.get("engine_type", ""),
+            "fuel": request.form.get("fuel", ""),
+            "vins": [v.strip() for v in vins_raw.split(",") if v.strip()],
+            "sources": [s.strip() for s in sources_raw.split(",") if s.strip()]
+        }
+        supabase.table("motorcycles").update(updated_bike).eq("id", bike_id).execute()
+        return redirect(url_for("admin"))
+    except Exception as e:
+        print("Error:", e)
+        return "Error editing motorcycle", 500
+
 @app.route("/delete-bike/<int:bike_id>", methods=["POST"])
 @login_required
 def delete_bike(bike_id):
@@ -224,19 +235,26 @@ def delete_bike(bike_id):
     try:
         supabase.table("motorcycles").delete().eq("id", bike_id).execute()
         return redirect(url_for("admin"))
-    except Exception as e:
-        print("❌ Error deleting bike:", e)
-        return "Error deleting motorcycle", 500
+    except: return "Error deleting motorcycle", 500
 
-# --- მომხმარებლებისა და ლოგების მართვა ---
-@app.route("/clear-logs", methods=["POST"])
+# --- 🚀 იუზერის რედაქტირება (ახალი) ---
+@app.route("/edit-user/<username>", methods=["POST"])
 @login_required
-def clear_logs():
-    if current_user.role != "admin": return jsonify({"error": "Unauthorized"}), 403
+def edit_user(username):
+    if current_user.role != "admin": return "Unauthorized", 403
     try:
-        supabase.table("search_logs").delete().neq("id", 0).execute()
-        return jsonify({"status": "success"})
-    except Exception as e: return jsonify({"status": "error", "message": str(e)}), 500
+        new_password = request.form.get("password", "").strip()
+        new_role = request.form.get("role", "user")
+        
+        update_data = {"role": new_role}
+        if new_password: # თუ ახალი პაროლი ჩაწერა, ვაახლებთ მაგასაც
+            update_data["password"] = bcrypt.generate_password_hash(new_password).decode("utf-8")
+            
+        supabase.table("users").update(update_data).eq("username", username).execute()
+        return redirect(url_for("admin"))
+    except Exception as e:
+        print("Error:", e)
+        return "Error editing user", 500
 
 @app.route("/add-user", methods=["POST"])
 @login_required
@@ -260,6 +278,15 @@ def delete_user(username):
         supabase.table("users").delete().eq("username", username).execute()
         return redirect(url_for("admin"))
     except: return "Error deleting user", 500
+
+@app.route("/clear-logs", methods=["POST"])
+@login_required
+def clear_logs():
+    if current_user.role != "admin": return jsonify({"error": "Unauthorized"}), 403
+    try:
+        supabase.table("search_logs").delete().neq("id", 0).execute()
+        return jsonify({"status": "success"})
+    except: return jsonify({"status": "error"}), 500
 
 @app.route("/")
 @login_required

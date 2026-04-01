@@ -15,17 +15,28 @@
         .add-box { background: rgba(46, 140, 255, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(46, 140, 255, 0.2); margin-bottom: 30px; text-align: left; }
         .add-box input, .add-box select { padding: 10px; border-radius: 6px; border: 1px solid #333; background: #161b29; color: white; box-sizing: border-box; }
         
-        /* ახალი კლასი მოტოების დასამატებელი ფორმისთვის */
         .bike-form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
         .bike-form-grid input { width: 100%; }
         
         .btn-add { background: #2e8cff; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .btn-add:hover { background: #1a73e8; }
+        
+        /* ღილაკების სტილები */
         .btn-delete { background: #ff4d4d; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .btn-edit { background: #f1c40f; color: #000; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 5px; font-weight: bold; }
         .btn-clear { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; transition: 0.3s; }
         .btn-clear:hover { background: #ff4d4d; color: white; }
+        .action-cell { display: flex; align-items: center; }
+
         h2 { color: white; margin-bottom: 20px; font-weight: 300; }
         .section-title { display: flex; justify-content: space-between; align-items: center; color: #888; font-size: 14px; text-transform: uppercase; margin-bottom: 10px; padding: 0 5px; }
+
+        /* Modal-ის (ამოსახტუნებელი ფანჯრის) სტილები */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center; }
+        .modal-content { max-width: 900px; width: 90%; position: relative; }
+        .modal-content.user-modal { max-width: 400px; }
+        .close-modal { position: absolute; right: 20px; top: 15px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-modal:hover { color: white; }
     </style>
 </head>
 <body>
@@ -59,8 +70,7 @@
                     
                     <input type="text" name="payload_kg" placeholder="Payload (kg)">
                     <input type="text" name="fuel" placeholder="Fuel (e.g. Petrol)">
-                    <input type="text" name="vins" placeholder="VINs (comma separated, e.g. 0M21, 0M22)" style="grid-column: span 2;">
-                    
+                    <input type="text" name="vins" placeholder="VINs (comma separated)" style="grid-column: span 2;">
                     <input type="text" name="sources" placeholder="PDF Sources (comma separated)" style="grid-column: span 4;">
                 </div>
                 <button type="submit" class="btn-add" style="width: 100%;">+ Add Motorcycle to Database</button>
@@ -71,13 +81,7 @@
         <div style="max-height: 400px; overflow-y: auto; margin-bottom: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
             <table class="admin-table" style="margin-bottom: 0;">
                 <thead style="position: sticky; top: 0; background: #0f1423; z-index: 10;">
-                    <tr>
-                        <th>Model</th>
-                        <th>Code</th>
-                        <th>Weight</th>
-                        <th>VINs</th>
-                        <th>Action</th>
-                    </tr>
+                    <tr><th>Model</th><th>Code</th><th>Weight</th><th>VINs</th><th>Action</th></tr>
                 </thead>
                 <tbody>
                     {% for bike in bikes %}
@@ -85,21 +89,23 @@
                         <td><strong>{{ bike.model }}</strong></td>
                         <td style="color: #2e8cff;">{{ bike.type_code }}</td>
                         <td>{{ bike.kerb_weight_kg }} kg</td>
-                        <td style="font-size: 11px; color: #888;">
-                            {% if bike.vins %}
-                                {{ bike.vins | join(', ') }}
-                            {% else %}
-                                —
-                            {% endif %}
-                        </td>
-                        <td>
-                            <form action="/delete-bike/{{ bike.id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{ bike.model }}?');">
+                        <td style="font-size: 11px; color: #888;">{{ bike.vins | join(', ') if bike.vins else '—' }}</td>
+                        <td class="action-cell">
+                            <button type="button" class="btn-edit" 
+                                data-id="{{ bike.id }}" data-model="{{ bike.model }}" data-type="{{ bike.type_code }}" 
+                                data-cc="{{ bike.engine_cc }}" data-kw="{{ bike.power_kw }}" data-hp="{{ bike.horsepower }}" 
+                                data-kerb="{{ bike.kerb_weight_kg }}" data-gross="{{ bike.gross_weight_kg }}" data-payload="{{ bike.payload_kg }}" 
+                                data-eng="{{ bike.engine_type }}" data-fuel="{{ bike.fuel }}" 
+                                data-vins="{{ bike.vins | join(', ') if bike.vins else '' }}" data-sources="{{ bike.sources | join(', ') if bike.sources else '' }}"
+                                onclick="openBikeEditModal(this)">Edit</button>
+
+                            <form action="/delete-bike/{{ bike.id }}" method="POST" onsubmit="return confirm('Delete {{ bike.model }}?');">
                                 <button type="submit" class="btn-delete">Delete</button>
                             </form>
                         </td>
                     </tr>
                     {% else %}
-                    <tr><td colspan="5" style="text-align: center; color: #555;">No motorcycles found in database</td></tr>
+                    <tr><td colspan="5" style="text-align: center; color: #555;">No motorcycles found</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -123,31 +129,26 @@
                 <tr>
                     <td><strong>{{ username }}</strong></td>
                     <td style="color: #2e8cff;">{{ data.role | upper }}</td>
-                    <td>
+                    <td class="action-cell">
+                        <button type="button" class="btn-edit" data-username="{{ username }}" data-role="{{ data.role }}" onclick="openUserEditModal(this)">Edit</button>
+
                         {% if username != current_user.id %}
                         <form action="/delete-user/{{ username }}" method="POST" onsubmit="return confirm('Delete this user?');">
                             <button type="submit" class="btn-delete">Delete</button>
                         </form>
-                        {% else %}<span style="color: #555; font-size: 12px;">(Active)</span>{% endif %}
+                        {% else %}<span style="color: #555; font-size: 12px; margin-left: 5px;">(Active)</span>{% endif %}
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
 
-        <div class="section-title">
-            <span>Recent Search Activity (Last 20)</span>
-            <button class="btn-clear" onclick="clearLogs()">Clear All Logs</button>
-        </div>
+        <div class="section-title"><span>Recent Search Activity</span><button class="btn-clear" onclick="clearLogs()">Clear All</button></div>
         <table class="admin-table">
             <thead><tr><th>User</th><th>Query</th><th>Time</th></tr></thead>
             <tbody id="logs-body">
                 {% for log in logs %}
-                <tr>
-                    <td>{{ log.username }}</td>
-                    <td style="color: #f1c40f;">{{ log.query }}</td>
-                    <td style="color: #888; font-size: 12px;">{{ log.created_at[:16].replace('T', ' ') }}</td>
-                </tr>
+                <tr><td>{{ log.username }}</td><td style="color: #f1c40f;">{{ log.query }}</td><td style="color: #888; font-size: 12px;">{{ log.created_at[:16].replace('T', ' ') }}</td></tr>
                 {% else %}
                 <tr><td colspan="3" style="text-align: center; color: #555;">No logs found</td></tr>
                 {% endfor %}
@@ -155,13 +156,81 @@
         </table>
     </div>
 
+    <div id="editBikeModal" class="modal">
+        <div class="modal-content add-box">
+            <span class="close-modal" onclick="document.getElementById('editBikeModal').style.display='none'">&times;</span>
+            <h3 style="color:white; margin-top:0; border-bottom:1px solid #333; padding-bottom:10px;">Edit Motorcycle</h3>
+            <form id="editBikeForm" method="POST">
+                <div class="bike-form-grid">
+                    <input type="text" id="eb_model" name="model" required>
+                    <input type="text" id="eb_type" name="type_code" required>
+                    <input type="text" id="eb_cc" name="engine_cc">
+                    <input type="text" id="eb_eng" name="engine_type">
+                    <input type="text" id="eb_kw" name="power_kw">
+                    <input type="text" id="eb_hp" name="horsepower">
+                    <input type="text" id="eb_kerb" name="kerb_weight_kg">
+                    <input type="text" id="eb_gross" name="gross_weight_kg">
+                    <input type="text" id="eb_payload" name="payload_kg">
+                    <input type="text" id="eb_fuel" name="fuel">
+                    <input type="text" id="eb_vins" name="vins" style="grid-column: span 2;">
+                    <input type="text" id="eb_sources" name="sources" style="grid-column: span 4;">
+                </div>
+                <button type="submit" class="btn-add" style="width: 100%; background: #f1c40f; color: #000;">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="editUserModal" class="modal">
+        <div class="modal-content user-modal add-box">
+            <span class="close-modal" onclick="document.getElementById('editUserModal').style.display='none'">&times;</span>
+            <h3 style="color:white; margin-top:0; border-bottom:1px solid #333; padding-bottom:10px;">Edit User: <span id="eu_name_display" style="color:#2e8cff;"></span></h3>
+            <form id="editUserForm" method="POST" style="display:flex; flex-direction:column; gap:10px;">
+                <input type="password" name="password" placeholder="New Password (leave blank to keep current)">
+                <select id="eu_role" name="role"><option value="user">User</option><option value="admin">Admin</option></select>
+                <button type="submit" class="btn-add" style="background: #f1c40f; color: #000;">Save User</button>
+            </form>
+        </div>
+    </div>
+
     <script>
+        // მოტოს რედაქტირების ფანჯრის გახსნა
+        function openBikeEditModal(btn) {
+            document.getElementById("editBikeForm").action = "/edit-bike/" + btn.getAttribute("data-id");
+            document.getElementById("eb_model").value = btn.getAttribute("data-model");
+            document.getElementById("eb_type").value = btn.getAttribute("data-type");
+            document.getElementById("eb_cc").value = btn.getAttribute("data-cc");
+            document.getElementById("eb_eng").value = btn.getAttribute("data-eng");
+            document.getElementById("eb_kw").value = btn.getAttribute("data-kw");
+            document.getElementById("eb_hp").value = btn.getAttribute("data-hp");
+            document.getElementById("eb_kerb").value = btn.getAttribute("data-kerb");
+            document.getElementById("eb_gross").value = btn.getAttribute("data-gross");
+            document.getElementById("eb_payload").value = btn.getAttribute("data-payload");
+            document.getElementById("eb_fuel").value = btn.getAttribute("data-fuel");
+            document.getElementById("eb_vins").value = btn.getAttribute("data-vins");
+            document.getElementById("eb_sources").value = btn.getAttribute("data-sources");
+            document.getElementById("editBikeModal").style.display = "flex";
+        }
+
+        // იუზერის რედაქტირების ფანჯრის გახსნა
+        function openUserEditModal(btn) {
+            let username = btn.getAttribute("data-username");
+            document.getElementById("editUserForm").action = "/edit-user/" + username;
+            document.getElementById("eu_name_display").innerText = username;
+            document.getElementById("eu_role").value = btn.getAttribute("data-role");
+            document.getElementById("editUserModal").style.display = "flex";
+        }
+
+        // ფანჯრის გარეთ დაჭერისას დახურვა
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('editBikeModal')) document.getElementById('editBikeModal').style.display = "none";
+            if (event.target == document.getElementById('editUserModal')) document.getElementById('editUserModal').style.display = "none";
+        }
+
         async function clearLogs() {
             if (!confirm("Are you sure you want to clear ALL search history?")) return;
             const res = await fetch("/clear-logs", { method: "POST" });
             if (res.ok) {
                 document.getElementById("logs-body").innerHTML = '<tr><td colspan="3" style="text-align: center; color: #555;">No logs found</td></tr>';
-                alert("Logs cleared successfully!");
             }
         }
     </script>
