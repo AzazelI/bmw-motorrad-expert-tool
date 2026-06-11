@@ -37,10 +37,53 @@
 
     <div class="search-card">
         <div class="search-box">
-            <input id="search" placeholder="Enter Model, Type Code (K66) or VIN (4–7)" onkeypress="handleKeyPress(event)">
+            <input id="search" placeholder="Enter Model, Type Code (K66) or VIN (4–7)" onkeypress="handleKeyPress(event)" oninput="toggleClearButton()">
+            <span class="clear-input-btn" onclick="goHome()" id="clearBtn">✕</span>
             <button class="search-btn" onclick="search()">🔍</button>
         </div>
         <button class="main-search" onclick="search()">Search</button>
+
+        <!-- Advanced Filters (Collapsible) -->
+        <div id="advFilters" class="adv-filters-container" style="display: none;">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>Engine Type</label>
+                    <select id="filterEngineType">
+                        <option value="">All</option>
+                        <option value="boxer">2-cylinder boxer</option>
+                        <option value="inline">Inline (2, 4, or 6 cylinder)</option>
+                        <option value="single-cylinder">Single-cylinder</option>
+                        <option value="electric">Electric motor</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Fuel</label>
+                    <select id="filterFuel">
+                        <option value="">All</option>
+                        <option value="petrol">Petrol</option>
+                        <option value="electric">Electric</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>Kerb Weight (kg)</label>
+                    <div class="range-inputs">
+                        <input type="number" id="filterWeightMin" placeholder="Min" min="0">
+                        <input type="number" id="filterWeightMax" placeholder="Max" min="0">
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>Horsepower (hp)</label>
+                    <div class="range-inputs">
+                        <input type="number" id="filterHpMin" placeholder="Min" min="0">
+                        <input type="number" id="filterHpMax" placeholder="Max" min="0">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-apply-filters" onclick="search()">Apply Filters</button>
+        </div>
+
         <p class="vin-hint" onclick="openModal('vinHelp')">
             ℹ️ VIN Help (characters 4–7)
         </p>
@@ -53,7 +96,7 @@
     </div>
 
     <div class="cards">
-        <div class="card" onclick="openModal('docsModal')">🏁 Technical Docs</div>
+        <div class="card" onclick="openDocsModal()">🏁 Technical Docs</div>
         <div class="card" onclick="window.open('https://aos.bmwgroup.com', '_blank')">🧰 Parts Info</div>
         <div class="card" onclick="openModal('supportModal')">📞 Support</div>
     </div>
@@ -88,7 +131,20 @@
         <span class="close" onclick="closeModal('vinHelp')">&times;</span>
         <h3>VIN Code Guide</h3>
         <p>Use characters <b>4–7</b> from your VIN</p>
-        <div class="vin-example">WB1 <span class="highlight">0380</span> 038ZU48517</div>
+        <div class="vin-guide-diagram">
+            <div class="vin-char-group">
+                <span class="vin-label">WMI</span>
+                <span class="vin-value">W B 1</span>
+            </div>
+            <div class="vin-char-group highlight">
+                <span class="vin-label">Type Code</span>
+                <span class="vin-value">0 3 8 0</span>
+            </div>
+            <div class="vin-char-group">
+                <span class="vin-label">Check/Seq</span>
+                <span class="vin-value">0 3 8 Z U 4 8 5 1 7</span>
+            </div>
+        </div>
         <p class="hint">Example: <b>0380</b></p>
     </div>
 </div>
@@ -120,13 +176,29 @@
 </div>
 
 <div id="docsModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content docs-modal-content">
         <span class="close" onclick="closeModal('docsModal')">&times;</span>
         <h3>🏁 Technical Documentation</h3>
-        <p>Access PDF data sheets and official guides.</p>
-        <div style="border: 1px dashed #444; padding: 20px; border-radius: 8px; margin-top: 10px;">
-            <p style="color: #888;">⚠️ Folder not linked. Please upload your expert PDF files to the local /static/docs/ directory or link your Google Drive.</p>
+        <p>Access official PDF data sheets and guides.</p>
+        
+        <!-- Docs Search -->
+        <input type="text" id="docsSearch" placeholder="Search manuals..." oninput="filterDocs()" class="docs-search-input">
+        
+        <!-- Docs List -->
+        <div id="docsList" class="docs-list-container">
+            <p style="color: #888;">Loading documents...</p>
         </div>
+        
+        <!-- Docs Upload (Admins Only) -->
+        {% if role == "admin" %}
+        <div class="docs-upload-box">
+            <h4>📤 Upload New PDF Manual</h4>
+            <form action="/upload-doc" method="POST" enctype="multipart/form-data" class="docs-upload-form">
+                <input type="file" name="doc" accept=".pdf" required class="docs-file-input">
+                <button type="submit" class="btn-upload">Upload PDF</button>
+            </form>
+        </div>
+        {% endif %}
     </div>
 </div>
 

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 import os
+from dotenv import load_dotenv
 from supabase import create_client, Client
 from datetime import datetime
 
@@ -9,6 +10,9 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+
+# Load environment variables from .env
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -28,6 +32,29 @@ SUPABASE_URL = os.environ.get('SUPABASE_URL', 'https://xxtwhxvafgkdrtuqqetu.supa
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY', 'sb_publishable_js3pEbUOHt__E9EBIoSYfQ_5qVCBImI') 
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+# ==========================================
+# ⚡ IN-MEMORY CACHE FOR MOTORCYCLES DATABASE
+# ==========================================
+_motorcycles_cache = None
+
+def get_motorcycles():
+    global _motorcycles_cache
+    if _motorcycles_cache is None:
+        print("🔄 Loading motorcycles from Supabase into memory cache...")
+        try:
+            response = supabase.table("motorcycles").select("*").execute()
+            _motorcycles_cache = response.data
+            print(f"✅ Loaded {len(_motorcycles_cache)} motorcycles into cache.")
+        except Exception as e:
+            print(f"❌ Error loading motorcycles from Supabase: {e}")
+            _motorcycles_cache = []
+    return _motorcycles_cache
+
+def clear_motorcycles_cache():
+    global _motorcycles_cache
+    _motorcycles_cache = None
+    print("🧹 Motorcycles memory cache cleared.")
 
 # =========================
 # 🔥 RATE LIMITER & LOGIN
@@ -56,6 +83,7 @@ def load_user(user_id):
 def log_search(username, query):
     try: supabase.table("search_logs").insert({"username": username, "query": query}).execute()
     except: pass
+
 
 # =========================
 # 🔑 AUTH ROUTES
@@ -121,8 +149,7 @@ def search():
         if not query: return jsonify({"error": "Empty query"})
         
         log_search(current_user.id, query)
-        db_response = supabase.table("motorcycles").select("*").execute()
-        motor_database = db_response.data
+        motor_database = get_motorcycles()
         results = []
         
         # ვშლით სფეისებს საძიებო სიტყვიდან (მაგ: "K 1600" ხდება "K1600")
@@ -175,6 +202,22 @@ def admin():
         users_res = supabase.table("users").select("username, role").execute()
         users_dict = {u["username"]: {"role": u["role"]} for u in users_res.data}
         
+        num_admins = sum(1 for u in users_res.data if u.get("role") == "admin")
+        num_users = sum(1 for u in users_res.data if u.get("role") == "user")
+        
+        total_searches = 0
+        popular_queries = []
+        try:
+            count_res = supabase.table("search_logs").select("id", count="exact").execute()
+            total_searches = count_res.count if count_res.count is not None else 0
+            
+            all_queries_res = supabase.table("search_logs").select("query").execute()
+            queries = [log["query"] for log in all_queries_res.data if log.get("query")]
+            from collections import Counter
+            popular_queries = Counter(queries).most_common(5)
+        except Exception as e:
+            print("Error computing search statistics:", e)
+
         logs = []
         try:
             log_res = supabase.table("search_logs").select("*").order("created_at", desc=True).limit(20).execute()
@@ -187,9 +230,21 @@ def admin():
             bikes = bike_res.data
         except: pass
 
-        return render_template("admin.html", users=users_dict, logs=logs, bikes=bikes)
+        return render_template(
+            "admin.html", 
+            users=users_dict, 
+            logs=logs, 
+            bikes=bikes,
+            total_bikes=len(get_motorcycles()),
+            num_admins=num_admins,
+            num_users=num_users,
+            total_searches=total_searches,
+            popular_queries=popular_queries
+        )
     except Exception as e:
+        print("Admin dashboard error:", e)
         return "Database Error", 500
+
 
 # --- მოტოციკლის დამატება ---
 @app.route("/add-bike", methods=["POST"])
@@ -215,6 +270,7 @@ def add_bike():
             "sources": [s.strip() for s in sources_raw.split(",") if s.strip()]
         }
         supabase.table("motorcycles").insert(new_bike).execute()
+        clear_motorcycles_cache()
         return redirect(url_for("admin"))
     except: return "Error adding motorcycle", 500
 
@@ -242,6 +298,7 @@ def edit_bike(bike_id):
             "sources": [s.strip() for s in sources_raw.split(",") if s.strip()]
         }
         supabase.table("motorcycles").update(updated_bike).eq("id", bike_id).execute()
+        clear_motorcycles_cache()
         return redirect(url_for("admin"))
     except Exception as e:
         print("Error:", e)
@@ -253,6 +310,7 @@ def delete_bike(bike_id):
     if current_user.role != "admin": return "Unauthorized", 403
     try:
         supabase.table("motorcycles").delete().eq("id", bike_id).execute()
+        clear_motorcycles_cache()
         return redirect(url_for("admin"))
     except: return "Error deleting motorcycle", 500
 
@@ -306,6 +364,72 @@ def clear_logs():
         supabase.table("search_logs").delete().neq("id", 0).execute()
         return jsonify({"status": "success"})
     except: return jsonify({"status": "error"}), 500
+
+# =========================
+# 📂 PDF DOCUMENT MANAGER
+# =========================
+DOCS_DIR = os.path.join(app.root_path, "static", "docs")
+os.makedirs(DOCS_DIR, exist_ok=True)
+
+@app.route("/api/docs", methods=["GET"])
+@login_required
+def list_docs():
+    try:
+        files = []
+        for filename in os.listdir(DOCS_DIR):
+            if filename.lower().endswith(".pdf"):
+                filepath = os.path.join(DOCS_DIR, filename)
+                size_bytes = os.path.getsize(filepath)
+                if size_bytes >= 1024 * 1024:
+                    size_str = f"{size_bytes / (1024 * 1024):.1f} MB"
+                else:
+                    size_str = f"{size_bytes / 1024:.1f} KB"
+                
+                files.append({
+                    "name": filename,
+                    "size": size_str,
+                    "url": url_for("static", filename=f"docs/{filename}")
+                })
+        return jsonify(files)
+    except Exception as e:
+        print("Error listing documents:", e)
+        return jsonify({"error": "Failed to list documents"}), 500
+
+@app.route("/upload-doc", methods=["POST"])
+@login_required
+def upload_doc():
+    if current_user.role != "admin": return "Unauthorized", 403
+    try:
+        if "doc" not in request.files:
+            return "No file part", 400
+        file = request.files["doc"]
+        if file.filename == "":
+            return "No selected file", 400
+            
+        if file:
+            filename = file.filename
+            if not filename.lower().endswith(".pdf"):
+                return "Only PDF files are allowed", 400
+            
+            if file.content_type != "application/pdf":
+                return "Invalid file type. Must be application/pdf", 400
+                
+            file.seek(0, os.SEEK_END)
+            size_bytes = file.tell()
+            file.seek(0)
+            if size_bytes > 15 * 1024 * 1024:
+                return "File is too large. Max size is 15MB", 400
+                
+            from werkzeug.utils import secure_filename
+            safe_filename = secure_filename(filename)
+            if not safe_filename:
+                safe_filename = f"manual_{int(datetime.now().timestamp())}.pdf"
+                
+            file.save(os.path.join(DOCS_DIR, safe_filename))
+            return redirect(request.referrer or url_for("home"))
+    except Exception as e:
+        print("Upload error:", e)
+        return "Error uploading file", 500
 
 @app.route("/")
 @login_required

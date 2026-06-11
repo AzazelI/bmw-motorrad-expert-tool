@@ -1,2 +1,6 @@
 database.db
 users.json
+.env
+__pycache__/
+*.pyc
+venv/
